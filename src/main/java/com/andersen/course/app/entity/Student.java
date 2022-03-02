@@ -33,36 +33,89 @@ public class Student {
 	@Column(name = "answer")
 	private double answer;
 
-//	@Column(name = "subgroup")
-//	private int subgroup;
+	@Column(name = "subgroup")
+	private int subgroup;
 
 
 	@Override
 	public String toString() {
 		return "Student{" +
-				"firstname='" + firstname + '\'' +
+				"id=" + id +
+				", firstname='" + firstname + '\'' +
 				", lastname='" + lastname + '\'' +
+				", result=" + result +
+				", check=" + check +
+				", question=" + question +
+				", answer=" + answer +
+				", subgroup=" + subgroup +
 				'}';
 	}
 
 	public int getId() {
+
 		return id;
 	}
 	public void setId(int id) {
+
 		this.id = id;
 	}
-	public String getName() {
+
+	public String getFirstname() {
 		return firstname;
 	}
-	public void setName(String name) {
-		this.firstname = name;
+
+	public void setFirstname(String firstname) {
+		this.firstname = firstname;
 	}
-	public String getSurname() {
+
+	public String getLastname() {
 		return lastname;
 	}
-	public void setSurname(String surname) {
-		this.lastname = surname;
+
+	public void setLastname(String lastname) {
+		this.lastname = lastname;
 	}
+
+	public double getResult() {
+		return result;
+	}
+
+	public void setResult(double result) {
+		this.result = result;
+	}
+
+	public boolean isCheck() {
+		return check;
+	}
+
+	public void setCheck(boolean check) {
+		this.check = check;
+	}
+
+	public double getQuestion() {
+		return question;
+	}
+
+	public void setQuestion(double question) {
+		this.question = question;
+	}
+
+	public double getAnswer() {
+		return answer;
+	}
+
+	public void setAnswer(double answer) {
+		this.answer = answer;
+	}
+
+	public int getSubgroup() {
+		return subgroup;
+	}
+
+	public void setSubgroup(int subgroup) {
+		this.subgroup = subgroup;
+	}
+
 	public Student() {
 		// TODO Auto-generated constructor stub
 	}
