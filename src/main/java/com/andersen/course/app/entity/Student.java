@@ -24,8 +24,8 @@ public class Student {
 	@Column(name = "result")
 	private double result;
 	
-	@Column(name = "check")
-	private boolean check;
+	@Column(name = "chck")
+	private boolean chck;
 
 	@Column(name = "question")
 	private double question;
@@ -44,7 +44,7 @@ public class Student {
 				", firstname='" + firstname + '\'' +
 				", lastname='" + lastname + '\'' +
 				", result=" + result +
-				", check=" + check +
+				", chck=" + chck +
 				", question=" + question +
 				", answer=" + answer +
 				", subgroup=" + subgroup +
@@ -84,12 +84,12 @@ public class Student {
 		this.result = result;
 	}
 
-	public boolean isCheck() {
-		return check;
+	public boolean isChck() {
+		return chck;
 	}
 
-	public void setCheck(boolean check) {
-		this.check = check;
+	public void setChck(boolean chck) {
+		this.chck = chck;
 	}
 
 	public double getQuestion() {

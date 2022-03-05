@@ -48,6 +48,6 @@ public class AppRESTController {
 	@DeleteMapping("/students/{id}")
 	public String deleteStudent(@PathVariable int id) {
 		studentService.deleteStudent(id);
-		return "student with ID = " + id + " was deleted";
+		return "student " + id + " was deleted";
 	}
 }
