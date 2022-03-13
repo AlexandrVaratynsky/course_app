@@ -1,5 +1,4 @@
 <%@ page import="java.util.ArrayList" %>
-<%@ page import="com.andersen.course.app.entity.Student" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE html>
 <html>
@@ -8,29 +7,29 @@
  <title>Insert title here</title>
 </head>
 <body>
-<h2>All students</h2>
+<h2>ShowAll</h2>
+
+<c:if test="${not empty Participants}">
 <table>
     <tr>
-
         <th> Firstname </th>
         <th> Lastname </th>
-        <th> subgroup </th>
-
     </tr>
 
-    <c:forEach var="stud"  items="${allStudents}">
-
-        <c:url var = "updateButton" value="/update">
-            <c:param name="studId" value="${stud.id}"/>
+    <c:forEach var="stud"  items="${Participants}">
+<%--        <c:if test="${stud.course.courseID == currentCourseID}">--%>
+        <c:url var = "updateButton" value="/add-participant">
+            <c:param name="participantID" value="${stud.participantID}"/>
+            <c:param name="courseID" value="${stud.course.courseID}"/>
         </c:url>
 
-        <c:url var = "deleteButton" value="/delete">
-            <c:param name="studId" value="${stud.id}"/>
+        <c:url var = "deleteButton" value="/delete-participant">
+            <c:param name="participantID" value="${stud.participantID}"/>
         </c:url>
         <tr>
-            <td>${stud.firstname}</td>
-            <td>${stud.lastname}</td>
-            <td>${stud.subgroup}</td>
+            <td>${stud.firstName}</td>
+            <td>${stud.lastName}</td>
+<%--            <td>${stud.active}</td>--%>
             <td>
                 <input type="button" value="Update"
                        onclick="window.location.href = '${updateButton}'">
@@ -39,8 +38,21 @@
                        onclick="window.location.href = '${deleteButton}'">
             </td>
         </tr>
+<%--        </c:if>--%>
     </c:forEach>
 
 </table>
+</c:if>
+<c:if test="${empty Participants}">
+    <br>no Participants
+</c:if>
+<c:url var = "addButton" value="/add-new-participant">
+    <c:param name="courseID" value='${currentCourseID}'/>
+</c:url>
+<input type="button" value="ADD"
+            onclick="window.location.href = '${addButton}'">
+<input type="button" value="all courses"
+       onclick="window.location.href = '/show-courses'">
+
 </body>
 </html>

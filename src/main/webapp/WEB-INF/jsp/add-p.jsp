@@ -5,16 +5,18 @@
     <title>Insert title here</title>
 </head>
 <body>
-
+<H2>add-p</H2>
 <br>
-<form:form action="save" modelAttribute="participant">
+
+<form:form action="save-p" modelAttribute="participant">
+    <form:hidden path="participantID"/>
+    <form:hidden path="active"/>
+    <form:hidden path="course.courseID"/>
+
     Firstname:<form:input path="firstName" />
-    <form:errors path="firstName"/>
     <br>
     Lastname:<form:input path="lastName" />
-    <form:errors path="lastName"/>
-    <br>
-    Subgroup:<form:input path="team.teamID" />
+<%--    Subgroup:<form:input path="team.teamID" />--%>
     <br>
     <br>
     <input type="submit" value=" OK ">
