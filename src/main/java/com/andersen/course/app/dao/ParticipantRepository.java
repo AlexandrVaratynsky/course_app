@@ -8,4 +8,5 @@ import java.util.List;
 public interface ParticipantRepository extends JpaRepository<Participant, Integer> {
     public List<Participant> findAllByCourse_CourseID(int id);
 
+
 }

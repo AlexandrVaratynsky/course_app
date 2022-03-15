@@ -1,6 +1,7 @@
 package com.andersen.course.app.entity;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "team")
@@ -10,21 +11,53 @@ public class Team {
     @Column(name = "teamid")
     private int teamID;
 
-    @ManyToOne
-    @JoinColumn(name = "captanid")
-    private Participant participant;
+    @OneToMany(cascade = CascadeType.PERSIST, mappedBy = "team")
+    private List<Participant> participants;
 
     @ManyToOne
     @JoinColumn(name = "courseid")
     private Course course;
 
-    @Column(name = "timenumber")
-    private int timeNumber;
+
+    @ManyToOne
+    @JoinColumn(name = "captainid")
+    private Participant captain;
+
+    @Column(name = "teamnumber")
+    private int teamNumber;
 
     @Column(name = "teammatecount")
     private int teammateCount;
 
+    public void setCaptain(Participant captain) {
+        this.captain = captain;
+    }
+
+    public Participant getCaptain() {
+        return captain;
+    }
+
     public Team() {
+    }
+
+    public List<Participant> getParticipants() {
+        return participants;
+    }
+
+    public void setParticipants(List<Participant> participants) {
+        this.participants = participants;
+    }
+
+    public Course getCourse() {
+        return course;
+    }
+
+    public void setCourse(Course course) {
+        this.course = course;
+    }
+
+    public Team(int teamNumber) {
+        this.teamNumber = teamNumber;
     }
 
     public int getTeamID() {
@@ -35,12 +68,12 @@ public class Team {
         this.teamID = teamID;
     }
 
-    public int getTimeNumber() {
-        return timeNumber;
+    public int getTeamNumber() {
+        return teamNumber;
     }
 
-    public void setTimeNumber(int timeNumber) {
-        this.timeNumber = timeNumber;
+    public void setTeamNumber(int timeNumber) {
+        this.teamNumber = timeNumber;
     }
 
     public int getTeammateCount() {

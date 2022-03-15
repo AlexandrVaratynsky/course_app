@@ -1,5 +1,5 @@
-<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
-<!DOCTYPE HTML>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <HTML>
 <head>
     <title>Insert title here</title>
@@ -7,14 +7,15 @@
 <body>
 
 <br>
+<br>
 <form:form action="save" modelAttribute="participant">
-    Firstname:<form:input path="firstName" />
+    Firstname:<form:input path="firstName"/>
     <form:errors path="firstName"/>
     <br>
-    Lastname:<form:input path="lastName" />
+    Lastname:<form:input path="lastName"/>
     <form:errors path="lastName"/>
     <br>
-    Subgroup:<form:input path="team.teamID" />
+    Subgroup:<form:input path="team.teamID"/>
     <br>
     <br>
     <input type="submit" value=" OK ">

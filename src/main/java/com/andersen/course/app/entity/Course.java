@@ -28,6 +28,33 @@ public class Course {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "course")
     private List<Meeting> meetings;
 
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "course")
+    private List<Team> teams;
+
+    public List<Participant> getParticipants() {
+        return participants;
+    }
+
+    public void setParticipants(List<Participant> participants) {
+        this.participants = participants;
+    }
+
+    public List<Meeting> getMeetings() {
+        return meetings;
+    }
+
+    public void setMeetings(List<Meeting> meetings) {
+        this.meetings = meetings;
+    }
+
+    public List<Team> getTeams() {
+        return teams;
+    }
+
+    public void setTeams(List<Team> teams) {
+        this.teams = teams;
+    }
+
     public Course() {
     }
 

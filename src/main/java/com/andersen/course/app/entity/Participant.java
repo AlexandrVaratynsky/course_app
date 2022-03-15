@@ -7,9 +7,7 @@ import org.hibernate.annotations.OnDeleteAction;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "participant" //, uniqueConstraints = {
-        //@UniqueConstraint(name = "uc_participant_courseid", columnNames = {"courseid"})
-//}
+@Table(name = "participant"
 )
 public class Participant {
 
