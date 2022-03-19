@@ -10,10 +10,8 @@
 <br>
 <form:form action="save" modelAttribute="participant">
     Firstname:<form:input path="firstName"/>
-    <form:errors path="firstName"/>
     <br>
-    Lastname:<form:input path="lastName"/>
-    <form:errors path="lastName"/>
+    Lastname:<form:input path="lastName" />
     <br>
     Subgroup:<form:input path="team.teamID"/>
     <br>

@@ -12,7 +12,9 @@
 <form:form action="save-p" modelAttribute="participant">
     <form:hidden path="participantID"/>
     <form:hidden path="active"/>
-    <form:hidden path="course.courseID"/>
+    <form:hidden  path="course.courseID"/>
+    <input type="hidden" name="courseID" value="${participant.course.courseID}">
+
 
     Firstname:<form:input path="firstName"/>
     <br>
@@ -20,7 +22,7 @@
     <%--    Subgroup:<form:input path="team.teamID" />--%>
     <br>
     <br>
-    <input type="submit" value=" OK ">
+    <input type="submit" value=" OK " formmethod="post">
 </form:form>
 
 </body>

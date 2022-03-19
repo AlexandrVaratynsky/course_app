@@ -1,14 +1,12 @@
 package com.andersen.course.app.entity;
 
 
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
-@Table(name = "participant"
-)
+@Table(name = "participant")
 public class Participant {
 
     @Id
@@ -23,6 +21,9 @@ public class Participant {
     @ManyToOne
     @JoinColumn(name = "courseid")
     private Course course;
+
+    @OneToMany(cascade = CascadeType.PERSIST, mappedBy = "participant")
+    private List<Stat> stats;
 
     @Column(name = "teammateordernumber")
     private int teammateOrderNumber;

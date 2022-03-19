@@ -12,17 +12,26 @@ public class Meeting {
     @Column(name = "meetingid")
     private int meetingID;
 
+    public Course getCourse() {
+        return course;
+    }
+
+    public void setCourse(Course course) {
+        this.course = course;
+    }
+
     @Column(name = "date")
     private Date date;
 
     @ManyToOne
-    @JoinColumn(name = "courseid")
+    @JoinColumn(name = "courseID")
     private Course course;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "course")
-    private List<Meeting> meetings;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "meeting")
+    private List<Stat> stats;
 
     public Meeting() {
+        date = new Date();
     }
 
     public int getMeetingID() {

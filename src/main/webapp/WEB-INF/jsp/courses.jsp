@@ -9,32 +9,34 @@
 <H2>Courses</H2>
 
 <c:if test="${not empty all}">
-    <table>
 
+    <table>
         <c:forEach var="course" items="${all}">
 
-            <c:url var="openButton" value="/open">
-                <c:param name="courseID" value="${course.courseID}"/>
-            </c:url>
-
-            <c:url var="deleteButton" value="/delete">
-                <c:param name="courseID" value="${course.courseID}"/>
-            </c:url>
             <tr>
                 <td>${course.name}</td>
-                <td>${course.startDate}</td>
-                    <%--            <td>${course.active}</td>--%>
-                <td>
-                    <input type="button" value="OPEN"
-                           onclick="window.location.href = '${openButton}'">
 
-                    <input type="button" value="Delete"
-                           onclick="window.location.href = '${deleteButton}'">
+                <td>${course.startDate}</td>
+
+                <td>
+                    <form name="f${course.courseID}" action="open" method="post">
+                        <input type="hidden" name="courseID" value="${course.courseID}">
+                        <input type="hidden" name="${course_data.courseID}" value="${course.courseID}">
+                        <input type="submit" value="OPEN">
+                    </form>
+                </td>
+
+                <td>
+                    <form name="d${course.courseID}" action="delete" method="post">
+                        <input type="hidden" name="courseID" value="${course.courseID}">
+                        <input type="submit" value="DELETE">
+                    </form>
                 </td>
             </tr>
         </c:forEach>
 
     </table>
+
 </c:if>
 <c:if test="${empty all}">
     <br>no courses

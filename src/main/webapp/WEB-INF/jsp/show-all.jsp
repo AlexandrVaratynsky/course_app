@@ -8,7 +8,7 @@
 </head>
 <body>
 <h2>Show all students</h2>
-
+${course_data.courseID}
 
 <table>
     <tr>
@@ -16,26 +16,16 @@
         <th> Lastname</th>
 
         <th>
-            <c:url var="addButton" value="/add-new-participant">
-                <c:param name="courseID" value='${currentCourseID}'/>
-            </c:url>
-            <input type="button" value="ADD"
-                   onclick="window.location.href = '${addButton}'">
+            <form action="add-new-participant" method="post">
+                <input type="hidden" name="courseID" value="${currentCourseID}">
+                <input type="submit" value="ADD">
+            </form>
         </th>
         <c:if test="${not empty Participants}">
         <br>
     </tr>
 
     <c:forEach var="stud" items="${Participants}">
-        <c:url var="updateButton" value="/add-participant">
-            <c:param name="participantID" value="${stud.participantID}"/>
-            <c:param name="courseID" value="${stud.course.courseID}"/>
-        </c:url>
-
-
-        <c:url var="deleteButton" value="/delete-participant">
-            <c:param name="participantID" value="${stud.participantID}"/>
-        </c:url>
 
         <tr>
             <td>${stud.firstName}</td>
@@ -43,11 +33,18 @@
 
 
             <td>
-                <input type="button" value="Update"
-                       onclick="window.location.href = '${updateButton}'">
+                <form id="conf" name="conf" action="add-participant" method="post">
+                    <input type="hidden" name="courseID" value="${stud.course.courseID}">
+                    <input type="hidden" name="participantID" value="${stud.participantID}">
+                    <input type="submit" value="update">
+                </form>
 
-                <input type="button" value="Delete"
-                       onclick="window.location.href = '${deleteButton}'">
+                <form name="del" action="delete-participant" method="post">
+                    <input type="hidden" name="courseID" value="${stud.course.courseID}">
+                    <input type="hidden" name="participantID" value="${stud.participantID}">
+                    <input type="submit" value="delete">
+                </form>
+
             </td>
         </tr>
 
@@ -61,13 +58,28 @@
 
 <br>
 <br>
-<input type="button" value="all courses"
-       onclick="window.location.href = '/show-courses'">
+<%--<input type="button" value="all courses"--%>
+<%--       onclick="window.location.href = '/show-courses'">--%>
 <c:if test="${not empty Participants}">
-    <input type="button" value="config teams"
-           onclick="window.location.href = '/teamconfig?courseID=${param.get("courseID")}'">
-    <input type="button" value="meeting"
-           onclick="window.location.href = '/meeting?courseID=${param.get("courseID")}'">
+
+    <form name="conf" action="teamconfig" method="post">
+        <input type="hidden" name="courseID" value="${currentCourseID}">
+        <input type="submit" value="config teams">
+    </form>
+
+    <form name="courses" action="show-courses" method="get">
+        <input type="hidden" name="courseID" value="${currentCourseID}">
+        <input type="submit" value="all courses">
+    </form>
+
+    <form name="meeting" action="meeting" method="post">
+        <input type="hidden" name="courseID" value="${currentCourseID}">
+        <input type="submit" value="meeting">
+    </form>
+
+
+    <%--    <input type="button" value="meeting"--%>
+    <%--           onclick="window.location.href = '/meeting?courseID=${param.get("courseID")}'">--%>
 </c:if>
 
 

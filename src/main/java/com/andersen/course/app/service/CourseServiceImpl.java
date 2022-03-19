@@ -10,7 +10,8 @@ import java.util.Map;
 import java.util.Optional;
 
 @Service
-public class CourseServiceImpl implements CourseService{
+public class CourseServiceImpl implements CourseService {
+
     @Autowired
     private CourseRepository courseRepository;
 
@@ -43,7 +44,6 @@ public class CourseServiceImpl implements CourseService{
     public void deleteCourse(int id) {
         courseRepository.deleteById(id);
     }
-
 
 
 }

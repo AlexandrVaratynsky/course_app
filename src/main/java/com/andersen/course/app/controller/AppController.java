@@ -1,21 +1,15 @@
 package com.andersen.course.app.controller;
 
-import com.andersen.course.app.dao.TeamRepository;
-import com.andersen.course.app.entity.Course;
-import com.andersen.course.app.entity.Meeting;
-import com.andersen.course.app.entity.Participant;
-import com.andersen.course.app.entity.Team;
-import com.andersen.course.app.service.CourseService;
-import com.andersen.course.app.service.ParticipantService;
-import com.andersen.course.app.service.TeamService;
+import com.andersen.course.app.entity.*;
+import com.andersen.course.app.quiz.QuizMeetingData;
+import com.andersen.course.app.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -29,24 +23,26 @@ public class AppController {
     private ParticipantService participantService;
     @Autowired
     private TeamService teamService;
-
-//    @ModelAttribute
-//    public int setGlobalconfig("courseID"){
-//        return
-//    }
+    @Autowired
+    private MeetingService meetingService;
+    @Autowired
+    private StatService statService;
 
     @RequestMapping("/open")
-    public String showAllParticipant(@RequestParam("courseID") int id, Model model) {
+    public String showAllParticipant(
+            @RequestParam("courseID") int id,
+            Model model) {
+
         List<Participant> courseParticipant = participantService.findAllByCourse(id);
         model.addAttribute("Participants", courseParticipant);
         model.addAttribute("currentCourseID", id);
         return "show-all";
     }
 
-    @RequestMapping("/delete")
+    @PostMapping("/delete")
     public String deleteCourse(@RequestParam("courseID") int id) {
         courseService.deleteCourse(id);
-        return "redirect:/show-courses";
+        return "show-courses";
     }
 
     @RequestMapping("/save")
@@ -64,29 +60,34 @@ public class AppController {
         return "add-course";
     }
 
-    @RequestMapping("/show-courses")
+    @GetMapping("/show-courses")
     public String showCourses(Model model) {
         List<Course> allCourse = courseService.getAllCourse();
         model.addAttribute("all", allCourse);
         return "courses";
     }
 
-    @RequestMapping("/delete-participant")
-    public String deletePapticipant(@RequestParam("participantID") int id) {
-        int courseID = participantService.getParticipant(id).getCourse().getCourseID();
+    @PostMapping("/delete-participant")
+    public String deletePapticipant(
+            @RequestParam("participantID") int id,
+            @RequestParam("courseID") int courseID
+    ) {
         participantService.deleteParticipant(id);
-        return "redirect:/open" + "?courseID=" + courseID;
+        return "forward:/open";
     }
 
     @RequestMapping("/add-participant")
     public String addParticipant(
             @RequestParam("courseID") int courseID,
             @RequestParam("participantID") int participantID,
+            HttpServletResponse response,
             Model model
     ) {
         Participant participant = participantService.getParticipant(participantID);
         model.addAttribute(participant);
-        return "add-p";
+        model.addAttribute("courseID", courseID);
+
+        return "/add-p";
     }
 
     @RequestMapping("/add-new-participant")
@@ -99,13 +100,18 @@ public class AppController {
         participant.setActive(true);
         participant.setCourse(courseService.getCourse(courseID));
         model.addAttribute(participant);
-        return "add-p";
+        return "/add-p";
     }
 
-    @RequestMapping("/save-p")
-    public String saveParticipant(@ModelAttribute("participant") Participant participant, Model model) {
+    @PostMapping("/save-p")
+    public String saveParticipant(
+            @ModelAttribute("participant") Participant participant,
+            @RequestParam("courseID") int courseID,
+            Model model) {
         participantService.save(participant);
-        return "redirect:/open" + "?courseID=" + participant.getCourse().getCourseID();
+        model.addAttribute("courseID", courseID);
+        System.out.println("--------------" + courseID + "------------");
+        return "forward:/open";
     }
 
     @RequestMapping("/teamconfig")
@@ -126,29 +132,23 @@ public class AppController {
         return "team-config";
     }
 
-    @RequestMapping("/save-config")
+    @RequestMapping(value = "/save-config")
     public String saveTeamsConfig(
+            //@RequestParam("courseID") int courseID,
             HttpServletRequest request,
-//            @RequestParam("courseID") int courseID,
             Model model
     ) {
         String courseID = request.getParameter("courseID");
         Map<String, String[]> reqMap = request.getParameterMap();
-//        for (String key : reqMap.keySet()
-//        ) {
-//            System.out.print(key + " --> ");
-//            for (String val : reqMap.get(key)
-//            ) {
-//                System.out.print(" " + val + " ");
-//            }
-//            System.out.println();
-//        }
 
         for (String key : reqMap.keySet()) {
+            if (key.equals("courseID")) {
+                continue;
+            }
             String[] keySplitted = key.split("\\-");
-            int viewParticipantID = Integer.valueOf(keySplitted[1]);
+            int viewParticipantID = Integer.parseInt(keySplitted[1]);
             String viewValue = reqMap.get(key)[0];
-            int intViewValue = Integer.valueOf(viewValue);
+            int intViewValue = Integer.parseInt(viewValue);
             Participant participant = participantService
                     .getParticipant(viewParticipantID);
 
@@ -161,27 +161,75 @@ public class AppController {
             }
             if (keySplitted[0].equals("active")) {
 
-                if (viewValue.equals("1")) participant.setActive(true);
-                else participant.setActive(false);
+                if (viewValue.equals("1")) {
+                    participant.setActive(true);
+                } else {
+                    participant.setActive(false);
+                }
+                participant.setActive(viewValue.equals("1"));
                 participantService.save(participant);
             }
 
-
-        }
-        //            if (keySplitted[0].equals("captain")) {
+//            if (keySplitted[0].equals("captain")) {
 //                if (intViewValue == 1){
-//                    teamService.getTeam(intViewValue).setCaptain(participant);
-//                    teamService.saveTeam(participant.getTeam());
+//                    Team team = participant.getTeam();
+//                    team.setCaptain(participant);
+//                    teamService.saveTeam(team);
+//
 //                }
 //            }
 
-        return "redirect:open?courseID=1";
+        }
+
+
+        return "forward:/open";
     }
+
     @RequestMapping("/meeting")
-    public String meeetengQuest(@RequestParam("courseID") int courseID,
-    Model model){
+    public String meetingQuest(@RequestParam("courseID") int courseID,
+                               Model model) {
+
         List<Participant> participants = participantService.findAllByCourse(courseID);
-        model.addAttribute("Participants", participants);
-        return "/meeting";
+        QuizMeetingData quizMeetingData = new QuizMeetingData(participants);
+        quizMeetingData.setCourseID(courseID);
+        quizMeetingData.setIsActive("false");
+        model.addAttribute("meetingData", quizMeetingData);
+//        String attend;
+//        String id;
+//        String active;
+
+
+        System.out.println("-------------" + quizMeetingData.getIsActive() + "------------");
+        return "/meeting-tab";
+    }
+
+    @RequestMapping("/quiz")
+    public String meetingQuest(@RequestParam("courseID") int courseID,
+                               HttpServletRequest request,
+                               Model model) {
+        List<Participant> participants = participantService.findAllByCourse(courseID);
+        QuizMeetingData quizMeetingData = new QuizMeetingData(participants);
+        Map<String, String[]> attendMap = request.getParameterMap();
+        Meeting meeting = meetingService.AddMeetting(courseService.getCourse(courseID));
+
+        Stat stat = new Stat();
+        meetingService.saveMeeting(meeting);
+        statService.saveStat(stat);
+        String quizIsActive = "true";
+        model.addAttribute("data", quizMeetingData);
+        model.addAttribute("meeting", meeting);
+        model.addAttribute("stat", stat);
+        model.addAttribute("participants", participants);
+        model.addAllAttributes(attendMap);
+        model.addAttribute("quizIsActive", quizIsActive);
+
+        System.out.println("----------------");
+        for (Map.Entry<String, String[]> s: attendMap.entrySet()
+             ) {
+
+            System.out.println(s.getKey() +" --- "+ s.getValue()[0]);
+        }
+
+        return "quiz-tab";
     }
 }

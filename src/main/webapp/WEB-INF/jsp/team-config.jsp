@@ -34,7 +34,7 @@
                     <input type='hidden' value="0" name=active-${stud.participantID}>
                 </td>
                 <td>
-                    <input type="number" value=${stud.team.teamNumber} min=0 max=50 name=team-${stud.participantID}>
+                    <input type="number" value="${stud.team.teamNumber}" min=0 max=50 name=team-${stud.participantID}>
 
                 </td>
 
@@ -50,8 +50,8 @@
     </table>
     <br>
     <br>
-    <input type="submit" value=" OK "
-           onclick="window.location.href = '/open?courseID=${param.get("courseID")}'">
+    <input type="hidden" name="courseID" value="${param.get("courseID")}">
+    <input type="submit" value=" OK " formmethod="post">
 </form:form>
 
 </body>
