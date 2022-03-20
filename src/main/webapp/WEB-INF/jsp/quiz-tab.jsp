@@ -1,14 +1,15 @@
 <%@ page import="com.andersen.course.app.quiz.QuizMeetingData" %>
+<%@ page import="java.util.Map" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <html>
 <head>
-    <title>Meeting</title>
+    <title>Quiz</title>
 </head>
 <body>
-<H2>Meeting</H2>
+<H2>Quiz</H2>
 
 <form:form id="meet" action="/quiz" modelAttribute="participants">
 
@@ -25,41 +26,71 @@
 
         </tr>
         <c:forEach var="stud" items="${participants}">
-            <H3>${'active-'.concat(stud.participantID)}</H3>
-            <c:if test="${'active-'.concat(stud.participantID) eq 'checked'}">
-                <tr>
-                    <td>${stud.firstName}</td>
-                    <td>${stud.lastName}</td>
+            <c:set var="currentID" value="${''.concat(stud.participantID)}"/>
+            <c:set var="currentID" value="${''.concat(stud.participantID)}"/>
 
+            <tr>
+                <td>${stud.firstName}</td>
+                <td>${stud.lastName}</td>
+                <td>
+<%--                    checked true--%>
+                    <c:if test="${param.containsKey(currentID)}">
+                        <c:if test="${param.get(currentID).equals('checked')}">
 
-                    <td>
+                            <input type="checkbox" disabled checked value="checked" name=${stud.participantID}>
+                            <input type='hidden' value="checked" name=${stud.participantID}>
+                        </c:if>
 
-                        <input type="checkbox" disabled  value="true" name=active-${stud.participantID} >
-                        <input type='hidden' value="0" name=active-${stud.participantID}>
-                    </td>
+                    </c:if>
+<%--                    checked false--%>
+                    <c:if test="${param.containsKey(currentID)}">
+                        <c:if test="${not param.get(currentID).equals('checked')}">
 
-                    <td>
-                        <input type="number" readonly disabled value=${stud.team.teamNumber} min=0 max=50
-                               name=team-${stud.team.teamID}>
+                            <input type="checkbox" disabled value="" name=${stud.participantID}>
+                            <input type='hidden' value="" name=${stud.participantID}>
 
-                    </td>
-                    <td>
-                        <input type="number" value=0 step="0.1" min=0 max=5 name=bonus-${stat.bonusScore}>
+                        </c:if>
+                    </c:if>
+<%--                    not checked--%>
+                    <c:if test="${not param.containsKey(currentID)}">
+                            <input type="checkbox" disabled value="" name=${stud.participantID}>
+                            <input type='hidden' value="" name=${stud.participantID}>
+                    </c:if>
 
-                    </td>
+                </td>
 
-                    <td>
-                        <input type="number" value=0 min=0 max=5 step="0.1" name=answer-${stat.answerScore}>
+                <td>
+                    <input type="number" readonly disabled value=${stud.team.teamNumber} min=0 max=50
+                           name=team-${stud.team.teamID}>
 
-                    </td>
-                    <td>
-                        <input type="number" value=0 min=0 max=5 step="0.1" name=question-${stat.questionScore}>
+                </td>
+                <td>
+                    <c:if test="${param.get(currentID).equals('checked')}">
+                        <input type="number" value="${param.get('bonus-'.concat(currentID))}" step="0.1" min=0 max=5 name=bonus-${currentID}>
+                    </c:if>
+                    <c:if test="${not param.get(currentID).equals('checked')}">
+                        <input type="number" disabled value="${param.get('bonus-'.concat(currentID))}" step="0.1" min=0 max=5 name=bonus-${currentID}>
+                    </c:if>
+                </td>
+                <td>
+                    <c:if test="${param.get(currentID).equals('checked')}">
+                        <input type="number" value="${param.get('answer-'.concat(currentID))}" min=0 max=5 step="0.1" name=answer-${currentID}>
+                    </c:if>
+                    <c:if test="${not param.get(currentID).equals('checked')}">
+                        <input type="number" disabled value="${param.get('answer-'.concat(currentID))}" min=0 max=5 step="0.1" name=answer-${currentID}>
+                    </c:if>
+                </td>
+                <td>
+                    <c:if test="${param.get(currentID).equals('checked')}">
+                        <input type="number" value="${param.get('answer-'.concat(currentID))}" min=0 max=5 step="0.1" name=question-${currentID}>
+                    </c:if>
+                    <c:if test="${not param.get(currentID).equals('checked')}">
+                        <input type="number" disabled value="${param.get('answer-'.concat(currentID))}" min=0 max=5 step="0.1"
+                               name=question-${currentID}>
+                    </c:if>
+                </td>
+            </tr>
 
-                    </td>
-
-
-                </tr>
-            </c:if>
         </c:forEach>
 
 
@@ -69,15 +100,15 @@
 
     <c:if test="${quizIsActive eq 'false'}">
         <input type="hidden" name="courseID" value="${param.get("courseID")}">
-        <input type="text" name="isActive" value="true">
+        <input type="hidden" name="isActive" value="true">
         <input type="submit" value="falseNEXT">
 
     </c:if>
 
     <c:if test="${quizIsActive eq 'true'}">
         <input type="hidden" name="courseID" value="${param.get("courseID")}">
-        <input type="text" name="isActive" value="true">
-        <input type="submit" value="trueNEXT"
+        <input type="hidden" name="isActive" value="true">
+        <input type="submit" value="NEXT"
                onclick="window.location.href = 'forward:/quiz'">
 
     </c:if>
@@ -97,8 +128,21 @@
 <%--${javaVal}--%>
 
 <%--<c:out value="${date_input}"/>--%>
-<c:forEach var="p" items="${participants}">
-    <input type="text" value=${p}><br>
+<c:forEach var="p" items="pre">
+
+    <c:out value="${p}"/>---<br>
+</c:forEach>
+
+<%--<c:forEach var="p" items="${param.values()}">--%>
+
+<%--    <c:out value="${p}"/>---<c:out value="${param.get(p)}"/><br>--%>
+<%--</c:forEach>--%>
+
+<c:forEach var="p" items="${param}">
+    <c:out value="${p.key}"/>
+    <c:forEach var="a" items="${p.value}">
+        ---<c:out value="${a}"/>
+    </c:forEach><br>
 </c:forEach>
 
 

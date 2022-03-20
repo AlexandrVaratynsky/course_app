@@ -36,7 +36,7 @@
 
                 <td>
 
-                    <input type="checkbox"  checked value="checked" name=active-${stud.participant.participantID} >
+                    <input type="checkbox"  checked="" value="checked" name=${stud.participant.participantID} >
 <%--                    <input type='hidden' value="false" name=${stud.participant.participantID}>--%>
                 </td>
 
@@ -47,16 +47,17 @@
                 </td>
                 <td>
                     <input type="number" disabled value="" step="0.1" min=0 max=5 name=bonus-${stud.participant.participantID}>
+                    <input type="hidden"  value="0" name="bonus-${stud.participant.participantID}">
 
                 </td>
 
                 <td>
                     <input type="number" disabled value="" min=0 max=5 step="0.1" name=question-${stud.participant.participantID}>
-
+                    <input type="hidden"  value="0" name="question-${stud.participant.participantID}">
                 </td>
                 <td>
                     <input type="number" disabled value="" min=0 max=5 step="0.1" name=answer-${stud.participant.participantID}>
-
+                    <input type="hidden"  value="0" name="answer-${stud.participant.participantID}">
                 </td>
 
 
@@ -87,13 +88,13 @@
 </form>
 
 
-<c:set var="time" value='*************'/>
-<% String date_input =(pageContext.getAttribute("time", PageContext.PAGE_SCOPE)).toString(); %>
-<%= date_input%>
+
+<%--<% String date_input =(pageContext.getAttribute("time", PageContext.PAGE_SCOPE)).toString(); %>--%>
+<%--<%= date_input%>--%>
 <%--<c:out value="${date_input}"/>--%>
-<c:forEach var="p" items="${param.values()}">
-    <input type="text" value=${p}><br>
-</c:forEach>
+<%--<c:forEach var="p" items="${param.values()}">--%>
+<%--    <input type="text" value=${p}><br>--%>
+<%--</c:forEach>--%>
 
 
 </body>

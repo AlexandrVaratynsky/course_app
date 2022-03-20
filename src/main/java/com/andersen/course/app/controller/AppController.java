@@ -110,7 +110,6 @@ public class AppController {
             Model model) {
         participantService.save(participant);
         model.addAttribute("courseID", courseID);
-        System.out.println("--------------" + courseID + "------------");
         return "forward:/open";
     }
 
@@ -134,7 +133,6 @@ public class AppController {
 
     @RequestMapping(value = "/save-config")
     public String saveTeamsConfig(
-            //@RequestParam("courseID") int courseID,
             HttpServletRequest request,
             Model model
     ) {
@@ -194,12 +192,6 @@ public class AppController {
         quizMeetingData.setCourseID(courseID);
         quizMeetingData.setIsActive("false");
         model.addAttribute("meetingData", quizMeetingData);
-//        String attend;
-//        String id;
-//        String active;
-
-
-        System.out.println("-------------" + quizMeetingData.getIsActive() + "------------");
         return "/meeting-tab";
     }
 
@@ -220,15 +212,9 @@ public class AppController {
         model.addAttribute("meeting", meeting);
         model.addAttribute("stat", stat);
         model.addAttribute("participants", participants);
-        model.addAllAttributes(attendMap);
+        model.mergeAttributes(attendMap);
         model.addAttribute("quizIsActive", quizIsActive);
 
-        System.out.println("----------------");
-        for (Map.Entry<String, String[]> s: attendMap.entrySet()
-             ) {
-
-            System.out.println(s.getKey() +" --- "+ s.getValue()[0]);
-        }
 
         return "quiz-tab";
     }
