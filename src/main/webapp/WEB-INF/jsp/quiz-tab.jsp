@@ -70,6 +70,7 @@
                     </c:if>
                     <c:if test="${not param.get(currentID).equals('checked')}">
                         <input type="number" disabled value="${param.get('bonus-'.concat(currentID))}" step="0.1" min=0 max=5 name=bonus-${currentID}>
+                        <input type="hidden" value="${param.get('bonus-'.concat(currentID))}" step="0.1" min=0 max=5 name=bonus-${currentID}>
                     </c:if>
                 </td>
                 <td>
@@ -78,6 +79,7 @@
                     </c:if>
                     <c:if test="${not param.get(currentID).equals('checked')}">
                         <input type="number" disabled value="${param.get('answer-'.concat(currentID))}" min=0 max=5 step="0.1" name=answer-${currentID}>
+                        <input type="hidden" value="${param.get('answer-'.concat(currentID))}" min=0 max=5 step="0.1" name=answer-${currentID}>
                     </c:if>
                 </td>
                 <td>
@@ -86,6 +88,8 @@
                     </c:if>
                     <c:if test="${not param.get(currentID).equals('checked')}">
                         <input type="number" disabled value="${param.get('answer-'.concat(currentID))}" min=0 max=5 step="0.1"
+                               name=question-${currentID}>
+                        <input type="hidden" value="${param.get('answer-'.concat(currentID))}" min=0 max=5 step="0.1"
                                name=question-${currentID}>
                     </c:if>
                 </td>
