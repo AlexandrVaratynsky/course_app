@@ -1,9 +1,6 @@
-<%@ page import="com.andersen.course.app.quiz.QuizMeetingData" %>
-<%@ page import="java.util.Map" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-
 <html>
 <head>
     <title>Quiz</title>
@@ -27,7 +24,10 @@
         </tr>
         <c:forEach var="stud" items="${participants}">
             <c:set var="currentID" value="${''.concat(stud.participantID)}"/>
-            <c:set var="currentID" value="${''.concat(stud.participantID)}"/>
+            <c:set var="answerID" value="${requestScope.get('whoAnswersID')}"/>
+            <c:set var="askID" value="${requestScope.get('whoAsksID')}"/>
+
+
 
             <tr>
                 <td>${stud.firstName}</td>
@@ -66,32 +66,51 @@
                 </td>
                 <td>
                     <c:if test="${param.get(currentID).equals('checked')}">
-                        <input type="number" value="${param.get('bonus-'.concat(currentID))}" step="0.1" min=0 max=5 name=bonus-${currentID}>
+                        <input type="number" value="${param.get('bonus-'.concat(currentID))}"
+                               step="0.1" min=0 max=5 name=bonus-${currentID}>
                     </c:if>
                     <c:if test="${not param.get(currentID).equals('checked')}">
-                        <input type="number" disabled value="${param.get('bonus-'.concat(currentID))}" step="0.1" min=0 max=5 name=bonus-${currentID}>
-                        <input type="hidden" value="${param.get('bonus-'.concat(currentID))}" step="0.1" min=0 max=5 name=bonus-${currentID}>
+                        <input type="number" disabled value="${param.get('bonus-'.concat(currentID))}"
+                               step="0.1" min=0 max=5 name=bonus-${currentID}>
+                        <input type="hidden" value="${param.get('bonus-'.concat(currentID))}"
+                               step="0.1" min=0 max=5 name=bonus-${currentID}>
                     </c:if>
                 </td>
                 <td>
-                    <c:if test="${param.get(currentID).equals('checked')}">
-                        <input type="number" value="${param.get('answer-'.concat(currentID))}" min=0 max=5 step="0.1" name=answer-${currentID}>
+                    <c:if test="${(param.get(currentID).equals('checked'))&&
+                    (askID.equals(currentID))}">
+                        <input type="number" value="${param.get('question-'.concat(currentID))}"
+                               min=0 max=5 step="0.1" name=question-${currentID}>
                     </c:if>
-                    <c:if test="${not param.get(currentID).equals('checked')}">
-                        <input type="number" disabled value="${param.get('answer-'.concat(currentID))}" min=0 max=5 step="0.1" name=answer-${currentID}>
-                        <input type="hidden" value="${param.get('answer-'.concat(currentID))}" min=0 max=5 step="0.1" name=answer-${currentID}>
+                    <c:if test="${not ((param.get(currentID).equals('checked'))&&
+                    (askID.equals(currentID)))}">
+                        <input type="number" disabled value="${param.get('question-'.concat(currentID))}"
+                               min=0 max=5 step="0.1"
+                               name=question-${currentID}>
+                        <input type="hidden" value="${param.get('question-'.concat(currentID))}"
+                               min=0 max=5 step="0.1"
+                               name=question-${currentID}>
                     </c:if>
                 </td>
                 <td>
-                    <c:if test="${param.get(currentID).equals('checked')}">
-                        <input type="number" value="${param.get('answer-'.concat(currentID))}" min=0 max=5 step="0.1" name=question-${currentID}>
+                    <c:if test="${(param.get(currentID).equals('checked'))&&
+                    (answerID.equals(currentID))}">
+                        <input type="number" value="${param.get('answer-'.concat(currentID))}"
+                               min=0 max=5 step="0.1" name=answer-${currentID}>
                     </c:if>
-                    <c:if test="${not param.get(currentID).equals('checked')}">
-                        <input type="number" disabled value="${param.get('answer-'.concat(currentID))}" min=0 max=5 step="0.1"
-                               name=question-${currentID}>
-                        <input type="hidden" value="${param.get('answer-'.concat(currentID))}" min=0 max=5 step="0.1"
-                               name=question-${currentID}>
+                    <c:if test="${not ((param.get(currentID).equals('checked'))&&
+                    (answerID.equals(currentID)))}">
+                        <input type="number" disabled value="${param.get('answer-'.concat(currentID))}"
+                               min=0 max=5 step="0.1" name=answer-${currentID}>
+                        <input type="hidden" value="${param.get('answer-'.concat(currentID))}"
+                               min=0 max=5 step="0.1" name=answer-${currentID}>
                     </c:if>
+                </td>
+                <td>
+                    <c:if test="${answerID.equals(currentID)}">answer</c:if>
+                    <c:if test="${askID.equals(currentID)}">ask</c:if>
+
+
                 </td>
             </tr>
 
@@ -125,29 +144,21 @@
 </form>
 
 
-<%--<c:set var="time" value='jsp to java'/>--%>
-<%--<% String date_input =(pageContext.getAttribute("time", PageContext.PAGE_SCOPE)).toString(); %>--%>
 
-<%--<% String javaVal = "java to jsp";%>--%>
-<%--${javaVal}--%>
 
-<%--<c:out value="${date_input}"/>--%>
-<c:forEach var="p" items="pre">
+<%--<c:forEach var="p" items="${requestScope.keySet()}">--%>
 
-    <c:out value="${p}"/>---<br>
-</c:forEach>
-
-<%--<c:forEach var="p" items="${param.values()}">--%>
-
-<%--    <c:out value="${p}"/>---<c:out value="${param.get(p)}"/><br>--%>
+whoAnswersID--<c:out value="${requestScope.get('whoAnswersID')}"/><br>
+whoAsksID--<c:out value="${requestScope.get('whoAsksID')}"/><br>
+end--<c:out value="${requestScope.get('end')}"/><br>
 <%--</c:forEach>--%>
 
-<c:forEach var="p" items="${param}">
-    <c:out value="${p.key}"/>
-    <c:forEach var="a" items="${p.value}">
-        ---<c:out value="${a}"/>
-    </c:forEach><br>
-</c:forEach>
+<%--<c:forEach var="p" items="${requestScope.entrySet()}">--%>
+<%--    <c:out value="${p.key}"/>--%>
+<%--    <c:forEach var="a" items="${p.value}">--%>
+<%--        ---<c:out value="${a}"/>--%>
+<%--    </c:forEach><br>--%>
+<%--</c:forEach>--%>
 
 
 </body>

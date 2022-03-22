@@ -38,7 +38,8 @@ ${course_data.courseID}
                     <input type="hidden" name="participantID" value="${stud.participantID}">
                     <input type="submit" value="update">
                 </form>
-
+            </td>
+            <td>
                 <form name="del" action="delete-participant" method="post">
                     <input type="hidden" name="courseID" value="${stud.course.courseID}">
                     <input type="hidden" name="participantID" value="${stud.participantID}">
