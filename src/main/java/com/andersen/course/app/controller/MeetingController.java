@@ -3,8 +3,7 @@ package com.andersen.course.app.controller;
 import com.andersen.course.app.entity.Meeting;
 import com.andersen.course.app.entity.Participant;
 import com.andersen.course.app.entity.Stat;
-import com.andersen.course.app.entity.Team;
-import com.andersen.course.app.quiz.QuizMeetingData;
+import com.andersen.course.app.quiz.DataGatherer;
 import com.andersen.course.app.quiz.Random;
 import com.andersen.course.app.service.CourseService;
 import com.andersen.course.app.service.MeetingService;
@@ -17,7 +16,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -41,27 +39,32 @@ public class MeetingController {
                                Model model) {
 
         List<Participant> participants = participantService.findAllByCourse(courseID);
-        QuizMeetingData quizMeetingData = new QuizMeetingData(participants);
-        quizMeetingData.setCourseID(courseID);
-        quizMeetingData.setIsActive("false");
-        model.addAttribute("meetingData", quizMeetingData);
+        Meeting meeting = meetingService.AddMeetting(courseService.getCourse(courseID));
+        meetingService.saveMeeting(meeting);
+        model.addAttribute("participants", participants);
+        model.addAttribute("meetingID", meeting.getMeetingID());
         random = new Random();
         random.setParticipants(participants);
-        System.out.println(random.toString());
         return "/meeting-tab";
     }
 
     @RequestMapping("/quiz")
     public String meetingQuest(@RequestParam("courseID") int courseID,
+                               @RequestParam("meetingID") int meetingID,
                                HttpServletRequest request,
                                Model model) {
         List<Participant> participants = participantService.findAllByCourse(courseID);
         Map<String, String[]> attendMap = request.getParameterMap();
-        Meeting meeting = meetingService.AddMeetting(courseService.getCourse(courseID));
-        Stat stat = new Stat();
-        meetingService.saveMeeting(meeting);
-        statService.saveStat(stat);
-        String quizIsActive = "true";
+
+        String quizIsActive;
+        if (request.getParameterMap().containsKey("end")) {
+            quizIsActive = "false";
+            DataGatherer gatherer = new DataGatherer(attendMap);
+            statService.saveStatByGathererData(gatherer);
+        } else {
+            quizIsActive = "true";
+        }
+
         model.addAttribute("participants", participants);
         model.mergeAttributes(attendMap);
         model.mergeAttributes(random.getMapAskAnswer());

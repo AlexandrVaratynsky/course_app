@@ -1,18 +1,29 @@
 package com.andersen.course.app.service;
 
+import com.andersen.course.app.dao.MeetingRepository;
+import com.andersen.course.app.dao.ParticipantRepository;
 import com.andersen.course.app.dao.StatRepository;
+import com.andersen.course.app.entity.Meeting;
+import com.andersen.course.app.entity.Participant;
 import com.andersen.course.app.entity.Stat;
+import com.andersen.course.app.quiz.DataGatherer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.Part;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 
 @Service
-public class StatServiceImpl implements StatService{
+public class StatServiceImpl implements StatService {
 
     @Autowired
     private StatRepository statRepository;
+    @Autowired
+    private MeetingRepository meetingRepository;
+    @Autowired
+    private ParticipantRepository participantRepository;
 
     @Override
     public List<Stat> getAllStat() {
@@ -41,6 +52,25 @@ public class StatServiceImpl implements StatService{
     @Override
     public void deleteStat(int id) {
         statRepository.deleteById(id);
+    }
+
+    @Override
+    public void saveStatByGathererData(DataGatherer gatherer) {
+        Meeting meeting = meetingRepository.getById(gatherer.getMeetingID());
+
+        for (String key : gatherer.getOutData().keySet()) {
+            Participant participant = participantRepository.getById(Integer.valueOf(key));
+            Stat stat = new Stat();
+            stat.setMeeting(meeting);
+            stat.setParticipant(participant);
+            double score = Double.valueOf(gatherer.getOutData().get(key)[0])
+                    + Double.valueOf(gatherer.getOutData().get(key)[1])
+                    + Double.valueOf(gatherer.getOutData().get(key)[2]);
+            stat.setScore(score);
+            stat.setAttendance(Boolean.parseBoolean(gatherer.getOutData().get(key)[3]));
+            statRepository.save(stat);
+        }
+
     }
 
 

@@ -11,9 +11,7 @@
 <H2>Meeting</H2>
 
 
-
-
-<form:form id="meeting" action="/quiz" modelAttribute="meetingData">
+<form:form id="meeting" action="/quiz" modelAttribute="participants">
 
 
     <table>
@@ -27,37 +25,36 @@
             <th> A</th>
 
         </tr>
-        <c:forEach var="stud" items="${meetingData.qParticipants}">
+        <c:forEach var="stud" items="${participants}">
 
             <tr>
-                <td>${stud.participant.firstName}</td>
-                <td>${stud.participant.lastName}</td>
+                <td>${stud.firstName}</td>
+                <td>${stud.lastName}</td>
 
 
                 <td>
 
-                    <input type="checkbox"  checked="" value="checked" name=${stud.participant.participantID} >
-<%--                    <input type='hidden' value="false" name=${stud.participant.participantID}>--%>
+                    <input type="checkbox" checked="" value="checked" name=${stud.participantID}>
                 </td>
 
                 <td>
-                    <input type="number" disabled readonly value=${stud.participant.team.teamNumber} min=0 max=50
-                           name=team-${stud.participant.participantID}>
-
-                </td>
-                <td>
-                    <input type="number" disabled value="" step="0.1" min=0 max=5 name=bonus-${stud.participant.participantID}>
-                    <input type="hidden"  value="0" name="bonus-${stud.participant.participantID}">
-
+                    <input type="number" disabled readonly value=${stud.team.teamNumber} min=0 max=50
+                           name=team-${stud.participantID}>
                 </td>
 
                 <td>
-                    <input type="number" disabled value="" min=0 max=5 step="0.1" name=question-${stud.participant.participantID}>
-                    <input type="hidden"  value="0" name="question-${stud.participant.participantID}">
+                    <input type="number" disabled value="" step="0.1" min=0 max=5 name=bonus-${stud.participantID}>
+                    <input type="hidden" value="0" name="bonus-${stud.participantID}">
                 </td>
+
                 <td>
-                    <input type="number" disabled value="" min=0 max=5 step="0.1" name=answer-${stud.participant.participantID}>
-                    <input type="hidden"  value="0" name="answer-${stud.participant.participantID}">
+                    <input type="number" disabled value="" min=0 max=5 step="0.1" name=question-${stud.participantID}>
+                    <input type="hidden" value="0" name="question-${stud.participantID}">
+                </td>
+
+                <td>
+                    <input type="number" disabled value="" min=0 max=5 step="0.1" name=answer-${stud.participantID}>
+                    <input type="hidden" value="0" name="answer-${stud.participantID}">
                 </td>
 
 
@@ -70,32 +67,14 @@
     <br>
     <br>
 
-<%--    <c:if test="${meetingData.isActive = false }">--%>
-    <input type="hidden" name="courseID" value="${meetingData.courseID}">
-<%--        <input type="text" name="isActive" value="true">--%>
-        <input type="submit" value="START">
+    <input type="hidden" name="courseID" value="${param.get('courseID')}">
+    <input type="hidden" name="meetingID" value="${meetingID}">
+    <input type="submit" value="START">
 
-<%--    </c:if>--%>
-    
-    
-    
-    
-    
 </form:form>
 <form name="save" action="open" method="post">
-    <input type="hidden" name="courseID" value="${meetingData.courseID}">
-    <input type="submit" value="FINISH">
+    <input type="hidden" name="courseID" value="${param.get('courseID')}">
+    <input type="submit" value="COURSE">
 </form>
-
-
-
-<%--<% String date_input =(pageContext.getAttribute("time", PageContext.PAGE_SCOPE)).toString(); %>--%>
-<%--<%= date_input%>--%>
-<%--<c:out value="${date_input}"/>--%>
-<%--<c:forEach var="p" items="${param.values()}">--%>
-<%--    <input type="text" value=${p}><br>--%>
-<%--</c:forEach>--%>
-
-
 </body>
 </html>

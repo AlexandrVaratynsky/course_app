@@ -58,7 +58,7 @@
                     </c:if>
 
                 </td>
-
+<%--                fields--%>
                 <td>
                     <input type="number" readonly disabled value=${stud.team.teamNumber} min=0 max=50
                            name=team-${stud.team.teamID}>
@@ -106,60 +106,38 @@
                                min=0 max=5 step="0.1" name=answer-${currentID}>
                     </c:if>
                 </td>
-                <td>
-                    <c:if test="${answerID.equals(currentID)}">answer</c:if>
-                    <c:if test="${askID.equals(currentID)}">ask</c:if>
-
-
-                </td>
             </tr>
 
         </c:forEach>
-
 
     </table>
     <br>
     <br>
 
-    <c:if test="${quizIsActive eq 'false'}">
-        <input type="hidden" name="courseID" value="${param.get("courseID")}">
-        <input type="hidden" name="isActive" value="true">
-        <input type="submit" value="falseNEXT">
+<%--            buttons--%>
 
+    <c:if test="${requestScope.containsKey('end')}">
+        <c:out value="${'quiz is over'}"/>
     </c:if>
 
-    <c:if test="${quizIsActive eq 'true'}">
+    <c:if test="${(quizIsActive eq 'true') &&(not requestScope.containsKey('end'))}">
         <input type="hidden" name="courseID" value="${param.get("courseID")}">
-        <input type="hidden" name="isActive" value="true">
+        <input type="hidden" name="meetingID" value="${param.get("meetingID")}">
         <input type="submit" value="NEXT"
                onclick="window.location.href = 'forward:/quiz'">
 
     </c:if>
 
-
 </form:form>
 <form name="save" action="open" method="post">
     <input type="hidden" name="courseID" value="${param.get("courseID")}">
-    <input type="submit" value="FINISH">
+    <input type="submit" value="SAVE">
 </form>
-
-
-
-
-<%--<c:forEach var="p" items="${requestScope.keySet()}">--%>
 
 whoAnswersID--<c:out value="${requestScope.get('whoAnswersID')}"/><br>
 whoAsksID--<c:out value="${requestScope.get('whoAsksID')}"/><br>
 end--<c:out value="${requestScope.get('end')}"/><br>
-<%--</c:forEach>--%>
-
-<%--<c:forEach var="p" items="${requestScope.entrySet()}">--%>
-<%--    <c:out value="${p.key}"/>--%>
-<%--    <c:forEach var="a" items="${p.value}">--%>
-<%--        ---<c:out value="${a}"/>--%>
-<%--    </c:forEach><br>--%>
-<%--</c:forEach>--%>
-
+quizIsActive--<c:out value="${requestScope.get('quizIsActive')}"/><br>
 
 </body>
 </html>

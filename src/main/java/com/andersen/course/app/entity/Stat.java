@@ -19,6 +19,18 @@ public class Stat {
     @JoinColumn(name = "meetingID")
     private Meeting meeting;
 
+    public Participant getParticipant() {
+        return participant;
+    }
+
+    public Meeting getMeeting() {
+        return meeting;
+    }
+
+    public void setMeeting(Meeting meeting) {
+        this.meeting = meeting;
+    }
+
     public Stat() {
 
     }

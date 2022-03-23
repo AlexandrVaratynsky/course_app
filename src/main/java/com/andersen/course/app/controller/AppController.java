@@ -1,19 +1,6 @@
 package com.andersen.course.app.controller;
 
-import com.andersen.course.app.entity.*;
-import com.andersen.course.app.quiz.DataGetherer;
-import com.andersen.course.app.quiz.QuizMeetingData;
-import com.andersen.course.app.service.*;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
 
 @Controller
 public class AppController {

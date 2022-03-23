@@ -12,14 +12,6 @@ public class Meeting {
     @Column(name = "meetingid")
     private int meetingID;
 
-    public Course getCourse() {
-        return course;
-    }
-
-    public void setCourse(Course course) {
-        this.course = course;
-    }
-
     @Column(name = "date")
     private Date date;
 
@@ -48,5 +40,13 @@ public class Meeting {
 
     public void setDate(Date date) {
         this.date = date;
+    }
+
+    public Course getCourse() {
+        return course;
+    }
+
+    public void setCourse(Course course) {
+        this.course = course;
     }
 }
