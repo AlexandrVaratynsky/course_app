@@ -11,5 +11,5 @@ public interface MeetingService {
     public Meeting getMeeting(int id);
     public void deleteMeeting(int id);
 
-    public Meeting AddMeetting(Course course);
+    public Meeting addMeetting(Course course);
 }

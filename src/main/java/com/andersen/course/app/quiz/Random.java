@@ -13,13 +13,26 @@ public class Random {
 
     public void setExcludedID(ArrayList<String> excludedID) {
         this.excludedID = excludedID;
+        if ((excludedID != null) && (!excludedID.isEmpty())) {
+            Iterator iterator = participants.iterator();
+            while(iterator.hasNext()) {
+                Participant participant = (Participant) iterator.next();
+                if (excludedID.contains(String.valueOf(participant.getParticipantID()))){
+                    iterator.remove();
+                }
+            }
+
+        }
+        if (excludedID.contains(String.valueOf(firstStartParticipant.getParticipantID()))){
+            saveFirst();
+        }
     }
 
     public void setParticipants(List<Participant> participants) {
         List<Participant> tmp = new ArrayList<>(participants);
         Collections.shuffle(tmp);
         this.participants = tmp;
-        prep();
+        saveFirst();
     }
 
     @Override
@@ -32,16 +45,10 @@ public class Random {
         return result;
     }
 
-    void prep() {
-        if ((excludedID != null)&&(!excludedID.isEmpty())) {
-            for (int i = 0; i < excludedID.size(); i++) {
-                participants.remove(participants.get(Integer.parseInt(excludedID.get(i))));
-            }
-        }
+    void saveFirst() {
         firstStartParticipant = participants.get(0);
         whoAsks = firstStartParticipant;
     }
-
 
     Participant getWhoAsks() {
         whoAsks = participants.remove(0);
@@ -49,22 +56,18 @@ public class Random {
     }
 
     Participant getWhoAnswersID() {
-        if (participants.iterator().hasNext()) {
+        if (participants.size() > 0) {
             for (int i = 0; i < participants.size(); i++) {
                 if (participants.get(i).getTeam().getTeamID() != whoAsks.getTeam().getTeamID()) {
                     whoAsks = participants.get(i);
                     return whoAsks;
-                }else{
+                } else {
                     participants.add(participants.remove(i));
-                    i--;
                 }
-
-
             }
-            whoAsks = participants.remove(0);
-
+            whoAsks = participants.get(0);
+            return whoAsks;
         }
-
         return firstStartParticipant;
     }
 

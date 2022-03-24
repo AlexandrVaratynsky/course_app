@@ -35,6 +35,7 @@
                 <td>
 
                     <input type="checkbox" checked="" value="checked" name=${stud.participantID}>
+                    ${ranrom}
                 </td>
 
                 <td>
@@ -74,7 +75,7 @@
 </form:form>
 <form name="save" action="open" method="post">
     <input type="hidden" name="courseID" value="${param.get('courseID')}">
-    <input type="submit" value="COURSE">
+    <input type="submit" value="<-- return">
 </form>
 </body>
 </html>

@@ -15,6 +15,8 @@ public class DataGatherer {
     public DataGatherer(Map<String, String[]> sourceData) {
         this.sourceData = sourceData;
         outData = new HashMap<String, String[]>();
+        meetingID = Integer.parseInt(sourceData.get("meetingID")[0]);
+        courseID = Integer.parseInt(sourceData.get("courseID")[0]);
     }
 
     public void setSourceData(Map<String, String[]> sourceData) {
@@ -28,8 +30,18 @@ public class DataGatherer {
         return outData;
     }
 
-    public void gether() {
+    public ArrayList<String> getUnChecked(){
+        this.gether();
+        ArrayList<String> participantsID =new ArrayList<>();
+        for (String key:outData.keySet()){
+            if (outData.get(key)[3].equals("false")){
+            participantsID.add(key);
+            }
+        }
+        return participantsID;
+    }
 
+    public void gether() {
         for (String key : sourceData.keySet()) {
             ArrayList<String> keySplitted = new ArrayList(Arrays.asList(key.split("\\-")));
             if (keySplitted.size() > 1) {

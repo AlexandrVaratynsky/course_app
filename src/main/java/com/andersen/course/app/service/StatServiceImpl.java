@@ -21,9 +21,9 @@ public class StatServiceImpl implements StatService {
     @Autowired
     private StatRepository statRepository;
     @Autowired
-    private MeetingRepository meetingRepository;
+    private MeetingService meetingService;
     @Autowired
-    private ParticipantRepository participantRepository;
+    private ParticipantService participantService;
 
     @Override
     public List<Stat> getAllStat() {
@@ -56,10 +56,10 @@ public class StatServiceImpl implements StatService {
 
     @Override
     public void saveStatByGathererData(DataGatherer gatherer) {
-        Meeting meeting = meetingRepository.getById(gatherer.getMeetingID());
+        Meeting meeting = meetingService.getMeeting(gatherer.getMeetingID());
 
         for (String key : gatherer.getOutData().keySet()) {
-            Participant participant = participantRepository.getById(Integer.valueOf(key));
+            Participant participant = participantService.getParticipant(Integer.valueOf(key));
             Stat stat = new Stat();
             stat.setMeeting(meeting);
             stat.setParticipant(participant);

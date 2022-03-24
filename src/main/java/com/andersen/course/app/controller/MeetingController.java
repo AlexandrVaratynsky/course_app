@@ -2,7 +2,6 @@ package com.andersen.course.app.controller;
 
 import com.andersen.course.app.entity.Meeting;
 import com.andersen.course.app.entity.Participant;
-import com.andersen.course.app.entity.Stat;
 import com.andersen.course.app.quiz.DataGatherer;
 import com.andersen.course.app.quiz.Random;
 import com.andersen.course.app.service.CourseService;
@@ -15,7 +14,10 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
@@ -32,6 +34,7 @@ public class MeetingController {
     StatService statService;
 
     Random random;
+    DataGatherer gatherer;
 
 
     @RequestMapping("/meeting")
@@ -39,12 +42,12 @@ public class MeetingController {
                                Model model) {
 
         List<Participant> participants = participantService.findAllByCourse(courseID);
-        Meeting meeting = meetingService.AddMeetting(courseService.getCourse(courseID));
+        Meeting meeting = meetingService.addMeetting(courseService.getCourse(courseID));
+        random = new Random();
+        random.setParticipants(participants);
         meetingService.saveMeeting(meeting);
         model.addAttribute("participants", participants);
         model.addAttribute("meetingID", meeting.getMeetingID());
-        random = new Random();
-        random.setParticipants(participants);
         return "/meeting-tab";
     }
 
@@ -54,22 +57,15 @@ public class MeetingController {
                                HttpServletRequest request,
                                Model model) {
         List<Participant> participants = participantService.findAllByCourse(courseID);
-        Map<String, String[]> attendMap = request.getParameterMap();
-
-        String quizIsActive;
-        if (request.getParameterMap().containsKey("end")) {
-            quizIsActive = "false";
-            DataGatherer gatherer = new DataGatherer(attendMap);
+        gatherer=new DataGatherer(request.getParameterMap());
+        random.setExcludedID(gatherer.getUnChecked());
+        Map<String, String> randomNextPair = random.getMapAskAnswer();
+        if (randomNextPair.containsKey("end")) {
+            gatherer=new DataGatherer(request.getParameterMap());
             statService.saveStatByGathererData(gatherer);
-        } else {
-            quizIsActive = "true";
         }
-
+        model.addAllAttributes(randomNextPair);
         model.addAttribute("participants", participants);
-        model.mergeAttributes(attendMap);
-        model.mergeAttributes(random.getMapAskAnswer());
-        model.addAttribute("quizIsActive", quizIsActive);
-
         return "quiz-tab";
     }
 }

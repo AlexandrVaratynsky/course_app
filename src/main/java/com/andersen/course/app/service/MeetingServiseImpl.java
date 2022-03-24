@@ -45,7 +45,7 @@ public class MeetingServiseImpl implements MeetingService{
     }
 
     @Override
-    public Meeting AddMeetting(Course course) {
+    public Meeting addMeetting(Course course) {
         Meeting meeting = new Meeting();
         meeting.setCourse(course);
         return meeting;

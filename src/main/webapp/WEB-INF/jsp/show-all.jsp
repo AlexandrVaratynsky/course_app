@@ -54,7 +54,15 @@ ${course_data.courseID}
 </table>
 
 <c:if test="${empty Participants}">
-    <br>no Participants
+
+<%--        <form name="back" action="open" method="post">--%>
+            <br>no Participants
+<%--            <input type="hidden" name="courseID" value="${param.get("courseID")}">--%>
+<%--            <input type="submit" value="<-- return"--%>
+<%--                   onclick="window.location.href = 'redirect:/open'">--%>
+<%--        </form>--%>
+
+
 </c:if>
 
 <br>

@@ -19,8 +19,18 @@ public class Stat {
     @JoinColumn(name = "meetingID")
     private Meeting meeting;
 
+    @Column(name = "attendance")
+    private boolean Attendance;
+
+    @Column(name = "score")
+    private double score;
+
     public Participant getParticipant() {
         return participant;
+    }
+
+    public void setParticipant(Participant participant) {
+        this.participant = participant;
     }
 
     public Meeting getMeeting() {
@@ -32,53 +42,7 @@ public class Stat {
     }
 
     public Stat() {
-
     }
-
-    public Participant getParticipantID() {
-        return participant;
-    }
-
-    public void setParticipant(Participant participantID) {
-        this.participant = participant;
-    }
-
-    @Column(name = "attendance")
-    private boolean Attendance;
-
-    @Column(name = "score")
-    private double score;
-
-    public double getBonusScore() {
-        return BonusScore;
-    }
-
-    public void setBonusScore(double bonusScore) {
-        BonusScore = bonusScore;
-    }
-
-    public double getAnswerScore() {
-        return AnswerScore;
-    }
-
-    public void setAnswerScore(double answerScore) {
-        AnswerScore = answerScore;
-    }
-
-    public double getQuestionScore() {
-        return QuestionScore;
-    }
-
-    public void setQuestionScore(double questionScore) {
-        QuestionScore = questionScore;
-    }
-
-    @Transient
-    private double BonusScore;
-    @Transient
-    private double AnswerScore;
-    @Transient
-    private double QuestionScore;
 
     public int getStatID() {
         return statID;

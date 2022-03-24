@@ -8,7 +8,7 @@
 <body>
 <H2>Quiz</H2>
 
-<form:form id="meet" action="/quiz" modelAttribute="participants">
+<form:form id="meet" action="/quiz">
 
 
     <table>
@@ -28,12 +28,11 @@
             <c:set var="askID" value="${requestScope.get('whoAsksID')}"/>
 
 
-
             <tr>
                 <td>${stud.firstName}</td>
                 <td>${stud.lastName}</td>
                 <td>
-<%--                    checked true--%>
+                        <%--                    checked true--%>
                     <c:if test="${param.containsKey(currentID)}">
                         <c:if test="${param.get(currentID).equals('checked')}">
 
@@ -42,7 +41,7 @@
                         </c:if>
 
                     </c:if>
-<%--                    checked false--%>
+                        <%--                    checked false--%>
                     <c:if test="${param.containsKey(currentID)}">
                         <c:if test="${not param.get(currentID).equals('checked')}">
 
@@ -51,14 +50,14 @@
 
                         </c:if>
                     </c:if>
-<%--                    not checked--%>
+                        <%--                    not checked--%>
                     <c:if test="${not param.containsKey(currentID)}">
-                            <input type="checkbox" disabled value="" name=${stud.participantID}>
-                            <input type='hidden' value="" name=${stud.participantID}>
+                        <input type="checkbox" disabled value="" name=${stud.participantID}>
+                        <input type='hidden' value="" name=${stud.participantID}>
                     </c:if>
 
                 </td>
-<%--                fields--%>
+                    <%--                fields--%>
                 <td>
                     <input type="number" readonly disabled value=${stud.team.teamNumber} min=0 max=50
                            name=team-${stud.team.teamID}>
@@ -114,30 +113,41 @@
     <br>
     <br>
 
-<%--            buttons--%>
-
+    <%--            buttons--%>
     <c:if test="${requestScope.containsKey('end')}">
-        <c:out value="${'quiz is over'}"/>
+        <c:out value="${'quiz is over'}"/><br>
+        <c:out value="${'results saved'}"/><br>
     </c:if>
 
-    <c:if test="${(quizIsActive eq 'true') &&(not requestScope.containsKey('end'))}">
+
+    <c:if test="${not requestScope.containsKey('end')}">
         <input type="hidden" name="courseID" value="${param.get("courseID")}">
         <input type="hidden" name="meetingID" value="${param.get("meetingID")}">
         <input type="submit" value="NEXT"
                onclick="window.location.href = 'forward:/quiz'">
 
     </c:if>
+    <%--    <c:if test="${requestScope.containsKey('end')}">--%>
+    <%--        <input type="hidden" name="courseID" value="${param.get("courseID")}">--%>
+    <%--        <input type="hidden" name="meetingID" value="${param.get("meetingID")}">--%>
+    <%--        <input type="submit" value="<---"--%>
+    <%--               onclick="window.location.href = 'forward:/quiz-save'">--%>
+
+    <%--    </c:if>--%>
 
 </form:form>
-<form name="save" action="open" method="post">
-    <input type="hidden" name="courseID" value="${param.get("courseID")}">
-    <input type="submit" value="SAVE">
-</form>
 
-whoAnswersID--<c:out value="${requestScope.get('whoAnswersID')}"/><br>
-whoAsksID--<c:out value="${requestScope.get('whoAsksID')}"/><br>
-end--<c:out value="${requestScope.get('end')}"/><br>
-quizIsActive--<c:out value="${requestScope.get('quizIsActive')}"/><br>
+<form id="meet" action="/open" method="post">
+    <input type="hidden" name="meetingID" value="${param.get("meetingID")}">
+    <input type="hidden" name="courseID" value="${param.get("courseID")}">
+
+    <input type="submit" value="<-- return">
+
+    <%--    <c:if test="${not requestScope.containsKey('end')}">--%>
+    <%--&lt;%&ndash;        <input type="hidden" name="end" value="end">&ndash;%&gt;--%>
+    <%--        <input type="submit" value="<-- return">--%>
+    <%--    </c:if>--%>
+</form>
 
 </body>
 </html>
