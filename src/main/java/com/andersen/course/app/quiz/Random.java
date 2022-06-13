@@ -37,9 +37,10 @@ public class Random {
 
     @Override
     public String toString() {
-        String result = " ID     Team " + System.lineSeparator();
+        String result = " p_ID     Team_ID" + System.lineSeparator();
         for (Participant p : participants) {
-            result += " " + p.getParticipantID() + " " + p.getTeam().getTeamID() + System.lineSeparator();
+            result += " " + p.getParticipantID() +
+                      " " + p.getTeam().getTeamID() + System.lineSeparator();
         }
         result += "-------------";
         return result;
@@ -47,22 +48,27 @@ public class Random {
 
     void saveFirst() {
         firstStartParticipant = participants.get(0);
-        whoAsks = firstStartParticipant;
     }
 
     Participant getWhoAsks() {
         whoAsks = participants.remove(0);
+//        System.out.print("member ID -> " +whoAsks.getParticipantID() + " first team -> " + whoAsks.getTeam().getTeamID()  + System.lineSeparator());
         return whoAsks;
     }
 
     Participant getWhoAnswersID() {
         if (participants.size() > 0) {
+            int skiped = 0;
             for (int i = 0; i < participants.size(); i++) {
-                if (participants.get(i).getTeam().getTeamID() != whoAsks.getTeam().getTeamID()) {
-                    whoAsks = participants.get(i);
+//                System.out.println("i = " + i);
+                if (participants.get(i-skiped).getTeam().getTeamID() != whoAsks.getTeam().getTeamID()) {
+                    whoAsks = participants.get(i-skiped);
                     return whoAsks;
                 } else {
-                    participants.add(participants.remove(i));
+//                    System.out.println("\u001B[31m" + this.toString() + "\u001B[0m");
+//                    System.out.println("\u001B[32m" + this.toString() + "\u001B[0m");
+                    participants.add(participants.remove(i-skiped));
+                    skiped++;
                 }
             }
             whoAsks = participants.get(0);
