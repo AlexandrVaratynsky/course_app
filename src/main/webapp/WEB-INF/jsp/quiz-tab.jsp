@@ -105,6 +105,9 @@
                                min=0 max=5 step="0.1" name=answer-${currentID}>
                     </c:if>
                 </td>
+<%--                <td>--%>
+<%--                    ${stud.participantID}--%>
+<%--                </td>--%>
             </tr>
 
         </c:forEach>
@@ -127,13 +130,6 @@
                onclick="window.location.href = 'forward:/quiz'">
 
     </c:if>
-    <%--    <c:if test="${requestScope.containsKey('end')}">--%>
-    <%--        <input type="hidden" name="courseID" value="${param.get("courseID")}">--%>
-    <%--        <input type="hidden" name="meetingID" value="${param.get("meetingID")}">--%>
-    <%--        <input type="submit" value="<---"--%>
-    <%--               onclick="window.location.href = 'forward:/quiz-save'">--%>
-
-    <%--    </c:if>--%>
 
 </form:form>
 
@@ -143,10 +139,6 @@
 
     <input type="submit" value="<-- return">
 
-    <%--    <c:if test="${not requestScope.containsKey('end')}">--%>
-    <%--&lt;%&ndash;        <input type="hidden" name="end" value="end">&ndash;%&gt;--%>
-    <%--        <input type="submit" value="<-- return">--%>
-    <%--    </c:if>--%>
 </form>
 
 </body>
