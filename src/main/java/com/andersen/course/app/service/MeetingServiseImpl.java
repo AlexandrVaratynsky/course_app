@@ -6,6 +6,7 @@ import com.andersen.course.app.entity.Meeting;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -42,6 +43,11 @@ public class MeetingServiseImpl implements MeetingService{
     @Override
     public void deleteMeeting(int id) {
         meetingRepository.deleteById(id);
+    }
+
+    @Override
+    public ArrayList<Meeting> getMeetingsByCourseID(int courseID) {
+        return  meetingRepository.getMeetingByCourse_CourseID(courseID);
     }
 
     @Override

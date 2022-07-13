@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.Part;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
@@ -71,6 +72,16 @@ public class StatServiceImpl implements StatService {
             statRepository.save(stat);
         }
 
+    }
+
+    @Override
+    public ArrayList<Stat> getAllByCourse(int courceID) {
+        return statRepository.findAllByMeeting_CourseCourseID(courceID);
+    }
+
+    @Override
+    public Stat getStatByMeeting(Meeting m) {
+        return statRepository.getStatByMeeting(m);
     }
 
 

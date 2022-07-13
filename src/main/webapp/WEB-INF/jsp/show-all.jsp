@@ -55,20 +55,12 @@ ${course_data.courseID}
 
 <c:if test="${empty Participants}">
 
-<%--        <form name="back" action="open" method="post">--%>
             <br>no Participants
-<%--            <input type="hidden" name="courseID" value="${param.get("courseID")}">--%>
-<%--            <input type="submit" value="<-- return"--%>
-<%--                   onclick="window.location.href = 'redirect:/open'">--%>
-<%--        </form>--%>
-
 
 </c:if>
 
 <br>
 <br>
-<%--<input type="button" value="all courses"--%>
-<%--       onclick="window.location.href = '/show-courses'">--%>
 <c:if test="${not empty Participants}">
 
     <form name="conf" action="teamconfig" method="post">
@@ -86,9 +78,11 @@ ${course_data.courseID}
         <input type="submit" value="meeting">
     </form>
 
+    <form name="meeting" action="stat" method="post">
+        <input type="hidden" name="courseID" value="${currentCourseID}">
+        <input type="submit" value="stat">
+    </form>
 
-    <%--    <input type="button" value="meeting"--%>
-    <%--           onclick="window.location.href = '/meeting?courseID=${param.get("courseID")}'">--%>
 </c:if>
 
 

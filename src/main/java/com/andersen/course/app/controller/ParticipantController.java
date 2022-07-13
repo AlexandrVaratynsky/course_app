@@ -1,8 +1,11 @@
 package com.andersen.course.app.controller;
 
+import com.andersen.course.app.dao.TeamRepository;
 import com.andersen.course.app.entity.Participant;
+import com.andersen.course.app.entity.Team;
 import com.andersen.course.app.service.CourseService;
 import com.andersen.course.app.service.ParticipantService;
+import com.andersen.course.app.service.TeamService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -20,6 +23,8 @@ public class ParticipantController {
     CourseService courseService;
     @Autowired
     ParticipantService participantService;
+    @Autowired
+    TeamService teamService;
 
     @RequestMapping("/open")
     public String showAllParticipant(
@@ -61,9 +66,11 @@ public class ParticipantController {
             Model model
     ) {
         Participant participant = new Participant();
-        participant.setTeam(null);
+        Team team = teamService.getOrAddNewTeamByTeamNumber(0);
+        participant.setTeam(team);
         participant.setActive(true);
         participant.setCourse(courseService.getCourse(courseID));
+        teamService.saveTeam(team);
         model.addAttribute(participant);
         return "/add-p";
     }
