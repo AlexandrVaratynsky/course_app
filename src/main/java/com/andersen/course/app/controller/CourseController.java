@@ -1,6 +1,7 @@
 package com.andersen.course.app.controller;
 
 import com.andersen.course.app.entity.Course;
+import com.andersen.course.app.entity.Team;
 import com.andersen.course.app.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -9,12 +10,14 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
 import java.util.List;
+
 @Controller
 public class CourseController {
 
     @Autowired
     private CourseService courseService;
-
+    @Autowired
+    private  TeamService teamService;
     @PostMapping("/delete")
     public String deleteCourse(@RequestParam("courseID") int id) {
         courseService.deleteCourse(id);
@@ -23,7 +26,10 @@ public class CourseController {
 
     @RequestMapping("/save")
     public String saveCourse(@ModelAttribute("course") Course course) {
+        Team defaultTeam = teamService.getOrAddNewTeamByTeamNumber(0);
+        defaultTeam.setCourse(course);
         courseService.saveCourse(course);
+        teamService.saveTeam(defaultTeam);
         return "redirect:/show-courses";
     }
 
