@@ -6,13 +6,13 @@
     <title>Title</title>
 </head>
 <body>
-<table>
+<table rules="all">
     <tr>
         <th> Firstname</th>
         <th> Lastname</th>
-        <c:forEach var="meeting" items="${meetings}">
-            <th>
-                <fmt:formatDate value="${meeting.date}" pattern="MM.dd.yyyy"/>
+        <c:forEach var="meeting" items="${meetingDates}">
+            <th style="writing-mode: vertical-rl">
+                ${meeting}
             </th>
         </c:forEach>
         <th> Total score</th>

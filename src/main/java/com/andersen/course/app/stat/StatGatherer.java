@@ -11,6 +11,7 @@ import org.springframework.stereotype.Component;
 
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -25,12 +26,17 @@ public class StatGatherer {
     @Autowired
     MeetingService meetingService;
     ArrayList<ArrayList<String>> outputStatData;
+    public ArrayList<String> meetingDates;
 
     public StatGatherer() {
     }
 
     public ArrayList<ArrayList<String>> getOutputStatData() {
         return outputStatData;
+    }
+
+    public ArrayList<String> getMeetingDates() {
+        return meetingDates;
     }
 
     @Override
@@ -49,20 +55,40 @@ public class StatGatherer {
         return result;
     }
 
+    public void loadMeetingDates(int courseID) {
+        ArrayList<Meeting> meetings = meetingService.getMeetingsByCourseID(courseID);
+        SimpleDateFormat sm = new SimpleDateFormat("dd.MM.yyyy");
+        ArrayList<String> meetingDates = new ArrayList();
+        for (Meeting m : meetings) {
+            meetingDates.add(sm.format(m.getDate()));
+        }
+        this.meetingDates = meetingDates;
+    }
+
     public void outputStatDataPrepare(int courseID) {
+        loadStatData(courseID);
+        loadMeetingDates(courseID);
+    }
+
+    public void loadStatData(int courseID) {
         ArrayList<Meeting> meetings = meetingService.getMeetingsByCourseID(courseID);
         List<Participant> participants = participantService.findAllByCourse(courseID);
         ArrayList<Stat> stats = statService.getAllByCourse(courseID);
 
         ArrayList<ArrayList<String>> lists = new ArrayList<>();
+        NumberFormat formatter = new DecimalFormat("#0.0");
+
         for (Participant p : participants) {
             ArrayList<String> line = new ArrayList<String>(Arrays.asList(new String[]{p.getFirstName(), p.getLastName()}));
             double statSum = 0;
-            NumberFormat formatter = new DecimalFormat("#0.0");
-            for (Stat s : stats) {
-                if (p.getParticipantID() == s.getParticipant().getParticipantID()) {
-                    line.add(formatter.format(s.getScore()));
-                    statSum += s.getScore();
+            for (Meeting m : meetings) {
+                line.add("");
+                for (Stat s : stats) {
+                    if ((s.getMeeting().getMeetingID() == m.getMeetingID()) &&
+                            (p.getParticipantID() == s.getParticipant().getParticipantID())) {
+                        line.set(line.size() - 1, formatter.format(s.getScore()));
+                        statSum += s.getScore();
+                    }
                 }
             }
             line.add(formatter.format(statSum));

@@ -26,6 +26,7 @@ public class StatController {
     public String teamConfig(@RequestParam("courseID") int courseID, Model model){
         statGatherer.outputStatDataPrepare(courseID);
         model.addAttribute("outputData",statGatherer.getOutputStatData());
+        model.addAttribute("meetingDates",statGatherer.getMeetingDates());
         return "stat-tab";
     }
 }
