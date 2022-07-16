@@ -24,6 +24,11 @@ public class TeamServiceImpl implements TeamService {
     }
 
     @Override
+    public List<Team> getAllTeamsInCourse(int courseID) {
+        return teamRepository.getAllByCourseCourseID(courseID);
+    }
+
+    @Override
     public void saveTeam(Team team) {
         teamRepository.save(team);
     }
@@ -46,6 +51,15 @@ public class TeamServiceImpl implements TeamService {
     @Override
     public Team getOrAddNewTeamByTeamNumber(int TeamNumber) {
         Team team = teamRepository.getTeamByTeamNumber(TeamNumber);
+        if (team == null) {
+            team = new Team();
+            team.setTeamNumber(TeamNumber);
+        }
+        return team;
+    }
+    @Override
+    public Team getOrAddNewTeamInCourseByTeamNumber(int courseID, int TeamNumber) {
+        Team team = teamRepository.getTeamByCourseCourseIDAndTeamNumber(courseID,TeamNumber);
         if (team == null) {
             team = new Team();
             team.setTeamNumber(TeamNumber);

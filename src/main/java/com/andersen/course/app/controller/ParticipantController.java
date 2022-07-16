@@ -1,6 +1,5 @@
 package com.andersen.course.app.controller;
 
-import com.andersen.course.app.dao.TeamRepository;
 import com.andersen.course.app.entity.Participant;
 import com.andersen.course.app.entity.Team;
 import com.andersen.course.app.service.CourseService;
@@ -14,7 +13,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 @Controller
 public class ParticipantController {
@@ -50,7 +48,6 @@ public class ParticipantController {
     public String addParticipant(
             @RequestParam("courseID") int courseID,
             @RequestParam("participantID") int participantID,
-            HttpServletResponse response,
             Model model
     ) {
         Participant participant = participantService.getParticipant(participantID);
@@ -66,11 +63,11 @@ public class ParticipantController {
             Model model
     ) {
         Participant participant = new Participant();
-        Team team = teamService.getOrAddNewTeamByTeamNumber(0);
+        Team team = teamService.getOrAddNewTeamInCourseByTeamNumber(courseID, 0);
+        teamService.saveTeam(team);
         participant.setTeam(team);
         participant.setActive(true);
         participant.setCourse(courseService.getCourse(courseID));
-        teamService.saveTeam(team);
         model.addAttribute(participant);
         return "/add-p";
     }

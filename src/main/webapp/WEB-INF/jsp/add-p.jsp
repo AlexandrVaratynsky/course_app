@@ -13,6 +13,7 @@
     <form:hidden path="participantID"/>
     <form:hidden path="active"/>
     <form:hidden  path="course.courseID"/>
+    <form:hidden  path="team.teamID"/>
     <input type="hidden" name="courseID" value="${participant.course.courseID}">
 
 

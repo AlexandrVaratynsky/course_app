@@ -26,9 +26,9 @@ public class CourseController {
 
     @RequestMapping("/save")
     public String saveCourse(@ModelAttribute("course") Course course) {
-        Team defaultTeam = teamService.getOrAddNewTeamByTeamNumber(0);
-        defaultTeam.setCourse(course);
         courseService.saveCourse(course);
+        Team defaultTeam = teamService.getOrAddNewTeamInCourseByTeamNumber(course.getCourseID(), 0);
+        defaultTeam.setCourse(course);
         teamService.saveTeam(defaultTeam);
         return "redirect:/show-courses";
     }

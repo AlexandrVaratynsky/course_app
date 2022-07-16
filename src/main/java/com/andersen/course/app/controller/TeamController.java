@@ -1,6 +1,5 @@
 package com.andersen.course.app.controller;
 
-import com.andersen.course.app.dao.TeamRepository;
 import com.andersen.course.app.entity.Participant;
 import com.andersen.course.app.entity.Team;
 import com.andersen.course.app.service.CourseService;
@@ -30,7 +29,7 @@ public class TeamController {
     public String teamConfig(
             @RequestParam("courseID") int courseID,
             Model model) {
-        List<Team> teams = teamService.getAllTeams();
+        List<Team> teams = teamService.getAllTeamsInCourse(courseID);
         if (teams.isEmpty()) {
             Team newTeam = new Team(0);
             newTeam.setCourse(courseService.getCourse(courseID));
@@ -49,7 +48,7 @@ public class TeamController {
             HttpServletRequest request,
             Model model
     ) {
-        String courseID = request.getParameter("courseID");
+        Integer courseID = Integer.parseInt(request.getParameter("courseID"));
         Map<String, String[]> reqMap = request.getParameterMap();
 
         for (String key : reqMap.keySet()) {
@@ -64,7 +63,7 @@ public class TeamController {
                     .getParticipant(viewParticipantID);
 
             if (keySplitted[0].equals("team")) {
-                Team team = teamService.getOrAddNewTeamByTeamNumber(intViewValue);
+                Team team = teamService.getOrAddNewTeamInCourseByTeamNumber(courseID,intViewValue);
                 participant.setTeam(team);
                 team.setCourse(courseService.getCourse(participant.getCourse().getCourseID()));
                 teamService.saveTeam(team);
