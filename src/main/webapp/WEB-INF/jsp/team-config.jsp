@@ -10,8 +10,22 @@
 <body>
 <H2>team config</H2>
 
-<form:form action="/save-config" modelAttribute="Participants">
+step param ${requestScope.TeamsConfigStep}
 
+<c:set var="nextURL" value="/save-config"/>
+<c:set var="teamFieldDisable" value=""/>
+<c:set var="captainFieldDisable" value=""/>
+<c:if test="${TeamsConfigStep.equals('captains')}">
+    <c:set var="teamFieldDisable" value="disabled"/>
+<%--    <c:set var="nextURL" value="/open"/>--%>
+</c:if>
+
+<c:if test="${TeamsConfigStep.equals('teams')}">
+    <c:set var="captainFieldDisable" value="disabled"/>
+<%--    <c:set var="nextURL" value="/save-config"/>--%>
+</c:if>
+
+<form:form action="${nextURL}" modelAttribute="Participants">
 
     <table>
         <tr>
@@ -22,7 +36,7 @@
             <th> Captain</th>
         </tr>
         <c:forEach var="stud" items="${Participants}">
-
+            <c:set var="captainCheck" value=""/>
             <tr>
                 <td>${stud.firstName}</td>
                 <td>${stud.lastName}</td>
@@ -30,17 +44,22 @@
 
                 <td>
 
-                    <input type="checkbox" checked value="1" name=active-${stud.participantID} >
-                    <input type='hidden' value="0" name=active-${stud.participantID}>
+                    <input type="checkbox" checked value="1" name=active-${stud.participantID} ${teamFieldDisable}>
+                    <input type='hidden' value="0" name=active-${stud.participantID} ${teamFieldDisable}>
                 </td>
                 <td>
-                    <input type="number" value="${stud.team.teamNumber}" min=0 max=50 name=team-${stud.participantID}>
+                    <input type="number" value="${stud.team.teamNumber}" min=0 max=50
+                           name=team-${stud.participantID} ${teamFieldDisable}>
 
                 </td>
 
+                <c:if test="${(stud.participantID.equals(stud.team.captain.participantID))}">
+                    <c:set var="captainCheck" value="checked"/>
+                </c:if>
+
                 <td>
-                    <input type="radio" value="1" name=captain-${stud.participantID}>
-                    <input type='hidden' value="0" name=captain-${stud.participantID}>
+                    <input type="radio" value=${stud.participantID} name=captain-${stud.team.teamID}
+                        ${captainFieldDisable} ${captainCheck}>
                 </td>
             </tr>
 
@@ -48,11 +67,28 @@
 
 
     </table>
-    <br>
-    <br>
+
+    <br><br><br>
+
     <input type="hidden" name="courseID" value="${param.get("courseID")}">
-    <input type="submit" value=" OK " formmethod="post">
+    <c:if test="${TeamsConfigStep.equals('teams')}">
+        <input type="submit" value=" next -> " formmethod="post">
+
+    </c:if>
+
+    <c:if test="${TeamsConfigStep.equals('captains')}">
+        <input type="submit" value=" finish -> " formmethod="post">
+        <input type="hidden" name="TeamsConfigStep" value="end">
+    </c:if>
+
 </form:form>
+
+<br>
+
+<form id="return button" action="/open" method="post">
+    <input type="hidden" name="courseID" value="${param.get("courseID")}">
+    <input type="submit" value="<-- return">
+</form>
 
 </body>
 </html>

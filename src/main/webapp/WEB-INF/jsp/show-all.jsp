@@ -55,7 +55,7 @@ ${course_data.courseID}
 
 <c:if test="${empty Participants}">
 
-            <br>no Participants
+    <br>no Participants
 
 </c:if>
 
@@ -68,10 +68,6 @@ ${course_data.courseID}
         <input type="submit" value="config teams">
     </form>
 
-    <form name="courses" action="show-courses" method="get">
-        <input type="hidden" name="courseID" value="${currentCourseID}">
-        <input type="submit" value="all courses">
-    </form>
 
     <form name="meeting" action="meeting" method="post">
         <input type="hidden" name="courseID" value="${currentCourseID}">
@@ -84,6 +80,10 @@ ${course_data.courseID}
     </form>
 
 </c:if>
+<form name="courses" action="show-courses" method="post">
+    <input type="hidden" name="courseID" value="${currentCourseID}">
+    <input type="submit" value="all courses">
+</form>
 
 
 </body>

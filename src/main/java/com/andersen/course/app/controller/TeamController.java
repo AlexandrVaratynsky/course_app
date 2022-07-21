@@ -28,6 +28,7 @@ public class TeamController {
     @RequestMapping("/teamconfig")
     public String teamConfig(
             @RequestParam("courseID") int courseID,
+            HttpServletRequest request,
             Model model) {
         List<Team> teams = teamService.getAllTeamsInCourse(courseID);
         if (teams.isEmpty()) {
@@ -36,23 +37,31 @@ public class TeamController {
             teams.add(newTeam);
             teamService.saveTeam(newTeam);
         }
+        String teamsConfigStep = "";
+        if (request.getAttribute("TeamsConfigStep") == null) {
+            teamsConfigStep = "teams";
+        } else {
+            teamsConfigStep = (String) request.getAttribute("TeamsConfigStep");
+        }
+
         List<Participant> participants = participantService.findAllByCourse(courseID);
         model.addAttribute("Participants", participants);
         model.addAttribute("Teams", teams);
-
+        model.addAttribute("TeamsConfigStep", teamsConfigStep);
         return "team-config";
     }
 
     @RequestMapping(value = "/save-config")
     public String saveTeamsConfig(
-            HttpServletRequest request,
-            Model model
+            HttpServletRequest request
     ) {
         Integer courseID = Integer.parseInt(request.getParameter("courseID"));
         Map<String, String[]> reqMap = request.getParameterMap();
-
+//       parameters looks like: key -"active-1" value - "{1[,0]}"
+//       "active" - parameter name, "-1" - participant ID, first of value array - chosen input value
+//        for "captain": "-1" is number of team where current member chosen as captain
         for (String key : reqMap.keySet()) {
-            if (key.equals("courseID")) {
+            if ((key.equals("courseID")) || (key.equals("TeamsConfigStep"))) {
                 continue;
             }
             String[] keySplitted = key.split("\\-");
@@ -63,7 +72,7 @@ public class TeamController {
                     .getParticipant(viewParticipantID);
 
             if (keySplitted[0].equals("team")) {
-                Team team = teamService.getOrAddNewTeamInCourseByTeamNumber(courseID,intViewValue);
+                Team team = teamService.getOrAddNewTeamInCourseByTeamNumber(courseID, intViewValue);
                 participant.setTeam(team);
                 team.setCourse(courseService.getCourse(participant.getCourse().getCourseID()));
                 teamService.saveTeam(team);
@@ -79,19 +88,22 @@ public class TeamController {
                 participant.setActive(viewValue.equals("1"));
                 participantService.save(participant);
             }
-
-//            if (keySplitted[0].equals("captain")) {
-//                if (intViewValue == 1){
-//                    Team team = participant.getTeam();
-//                    team.setCaptain(participant);
-//                    teamService.saveTeam(team);
-//
-//                }
-//            }
+            if (keySplitted[0].equals("captain")) {
+                Participant captain = participantService.getParticipant(Integer.parseInt(viewValue));
+                Team team = captain.getTeam();
+                team.setCaptain(captain);
+                teamService.saveTeam(team);
+            }
 
         }
+        String nextURL = "";
+        if (!reqMap.containsKey("TeamsConfigStep")) {
+            nextURL = "forward:/teamconfig";
 
-
-        return "forward:/open";
+            request.setAttribute("TeamsConfigStep", "captains");
+        } else {
+            nextURL = "forward:/open";
+        }
+        return nextURL;
     }
 }

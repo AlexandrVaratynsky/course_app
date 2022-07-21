@@ -105,9 +105,6 @@
                                min=0 max=5 step="0.1" name=answer-${currentID}>
                     </c:if>
                 </td>
-<%--                <td>--%>
-<%--                    ${stud.participantID}--%>
-<%--                </td>--%>
             </tr>
 
         </c:forEach>

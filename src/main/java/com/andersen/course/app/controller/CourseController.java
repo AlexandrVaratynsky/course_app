@@ -42,7 +42,7 @@ public class CourseController {
         return "add-course";
     }
 
-    @GetMapping("/show-courses")
+    @PostMapping("/show-courses")
     public String showCourses(Model model) {
         List<Course> allCourse = courseService.getAllCourse();
         model.addAttribute("all", allCourse);
