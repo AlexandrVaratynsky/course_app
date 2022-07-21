@@ -65,8 +65,15 @@
                 </td>
                 <td>
                     <c:if test="${param.get(currentID).equals('checked')}">
-                        <input type="number" value="${param.get('bonus-'.concat(currentID))}"
-                               step="0.1" min=0 max=5 name=bonus-${currentID}>
+                        <c:if test="${not requestScope.containsKey('end')}">
+                            <input type="number" value="${param.get('bonus-'.concat(currentID))}"
+                                   step="0.1" min=0 max=5 name=bonus-${currentID}>
+                        </c:if>
+
+                        <c:if test="${requestScope.containsKey('end')}">
+                            <input type="number" disabled value="${param.get('bonus-'.concat(currentID))}"
+                                   step="0.1" min=0 max=5 name=bonus-${currentID}>
+                        </c:if>
                     </c:if>
                     <c:if test="${not param.get(currentID).equals('checked')}">
                         <input type="number" disabled value="${param.get('bonus-'.concat(currentID))}"
