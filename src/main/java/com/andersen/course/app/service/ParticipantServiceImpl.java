@@ -48,6 +48,10 @@ public class ParticipantServiceImpl implements ParticipantService {
         return participantRepository.findAllByCourse_CourseID(courseID);
     }
 
+    @Override
+    public List<Participant> findAllActiveByCourse(int courseID) {
+        return participantRepository.findAllByCourse_CourseIDAndActiveIsTrue(courseID);
+    }
 
 
 }

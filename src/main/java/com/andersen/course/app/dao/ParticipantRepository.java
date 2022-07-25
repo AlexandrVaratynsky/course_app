@@ -10,6 +10,8 @@ import java.util.Map;
 public interface ParticipantRepository extends JpaRepository<Participant, Integer> {
     public List<Participant> findAllByCourse_CourseID(int id);
 
+    public List<Participant> findAllByCourse_CourseIDAndActiveIsTrue(int id);
+
 
 
 

@@ -37,14 +37,18 @@ step param ${requestScope.TeamsConfigStep}
         </tr>
         <c:forEach var="stud" items="${Participants}">
             <c:set var="captainCheck" value=""/>
+            <c:set var="activeCheck" value=""/>
             <tr>
                 <td>${stud.firstName}</td>
                 <td>${stud.lastName}</td>
 
 
                 <td>
+                    <c:if test="${(stud.active.equals(true))}">
+                        <c:set var="activeCheck" value="checked"/>
+                    </c:if>
 
-                    <input type="checkbox" checked value="1" name=active-${stud.participantID} ${teamFieldDisable}>
+                    <input type="checkbox" ${activeCheck} value="1" name=active-${stud.participantID} ${teamFieldDisable}>
                     <input type='hidden' value="0" name=active-${stud.participantID} ${teamFieldDisable}>
                 </td>
                 <td>

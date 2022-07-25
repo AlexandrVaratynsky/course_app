@@ -37,7 +37,7 @@ public class MeetingController {
     public String meetingQuest(@RequestParam("courseID") int courseID,
                                Model model) {
 
-        List<Participant> participants = participantService.findAllByCourse(courseID);
+        List<Participant> participants = participantService.findAllActiveByCourse(courseID);
         Meeting meeting = meetingService.addMeetting(courseService.getCourse(courseID));
         random = new Random();
         random.setParticipants(participants);
@@ -52,7 +52,7 @@ public class MeetingController {
                                @RequestParam("meetingID") int meetingID,
                                HttpServletRequest request,
                                Model model) {
-        List<Participant> participants = participantService.findAllByCourse(courseID);
+        List<Participant> participants = participantService.findAllActiveByCourse(courseID);
         gatherer=new DataGatherer(request.getParameterMap());
         random.setExcludedID(gatherer.getUnChecked());
         Map<String, String> randomNextPair = random.getMapAskAnswer();

@@ -11,4 +11,5 @@ public interface ParticipantService {
     public Participant getParticipant(int id);
     public void deleteParticipant(int id);
     public List<Participant> findAllByCourse(int courseID);
+    public List<Participant> findAllActiveByCourse(int courseID);
     }
