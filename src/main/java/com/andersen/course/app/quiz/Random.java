@@ -15,15 +15,15 @@ public class Random {
         this.excludedID = excludedID;
         if ((excludedID != null) && (!excludedID.isEmpty())) {
             Iterator iterator = participants.iterator();
-            while(iterator.hasNext()) {
+            while (iterator.hasNext()) {
                 Participant participant = (Participant) iterator.next();
-                if (excludedID.contains(String.valueOf(participant.getParticipantID()))){
+                if (excludedID.contains(String.valueOf(participant.getParticipantID()))) {
                     iterator.remove();
                 }
             }
 
         }
-        if (excludedID.contains(String.valueOf(firstStartParticipant.getParticipantID()))){
+        if (excludedID.contains(String.valueOf(firstStartParticipant.getParticipantID()))) {
             saveFirst();
         }
     }
@@ -40,14 +40,16 @@ public class Random {
         String result = " p_ID     Team_ID" + System.lineSeparator();
         for (Participant p : participants) {
             result += " " + p.getParticipantID() +
-                      " " + p.getTeam().getTeamID() + System.lineSeparator();
+                    " " + p.getTeam().getTeamID() + System.lineSeparator();
         }
         result += "-------------";
         return result;
     }
 
     void saveFirst() {
-        firstStartParticipant = participants.get(0);
+        if (!participants.isEmpty()) {
+            firstStartParticipant = participants.get(0);
+        }
     }
 
     Participant getWhoAsks() {
@@ -61,13 +63,13 @@ public class Random {
             int skiped = 0;
             for (int i = 0; i < participants.size(); i++) {
 //                System.out.println("i = " + i);
-                if (participants.get(i-skiped).getTeam().getTeamID() != whoAsks.getTeam().getTeamID()) {
-                    whoAsks = participants.get(i-skiped);
+                if (participants.get(i - skiped).getTeam().getTeamID() != whoAsks.getTeam().getTeamID()) {
+                    whoAsks = participants.get(i - skiped);
                     return whoAsks;
                 } else {
 //                    System.out.println("\u001B[31m" + this.toString() + "\u001B[0m");
 //                    System.out.println("\u001B[32m" + this.toString() + "\u001B[0m");
-                    participants.add(participants.remove(i-skiped));
+                    participants.add(participants.remove(i - skiped));
                     skiped++;
                 }
             }
