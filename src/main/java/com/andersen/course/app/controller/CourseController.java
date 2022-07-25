@@ -21,7 +21,7 @@ public class CourseController {
     @PostMapping("/delete")
     public String deleteCourse(@RequestParam("courseID") int id) {
         courseService.deleteCourse(id);
-        return "show-courses";
+        return "forward:/show-courses";
     }
 
     @RequestMapping("/save")
