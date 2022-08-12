@@ -11,12 +11,12 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class MeetingServiseImpl implements MeetingService{
+public class MeetingServiceImpl implements MeetingService{
 
     @Autowired
     private MeetingRepository meetingRepository;
 
-    public MeetingServiseImpl() {
+    public MeetingServiceImpl() {
     }
 
     @Override
@@ -51,7 +51,7 @@ public class MeetingServiseImpl implements MeetingService{
     }
 
     @Override
-    public Meeting addMeetting(Course course) {
+    public Meeting addMeeting(Course course) {
         Meeting meeting = new Meeting();
         meeting.setCourse(course);
         return meeting;

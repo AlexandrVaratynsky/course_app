@@ -1,4 +1,20 @@
 package com.andersen.course.app.quiz;
+/*
+    sourceData field looks like:
+    -----------------
+    141: checked
+    bonus-141: 1
+    question-141: 0.3
+    answer-141: 0.2
+    -----------------
+    i.e "[ID]:checked", "[ID]:" or "[category-ID]:value"
+
+    outData field looks like:
+    -----------------
+    "141": ["1" , "0.3", "0.2", "true"]
+    -----------------
+    i.e "[ID]": ["bonus value", "question value", "answer value", "participation value"]
+    */
 
 import java.util.ArrayList;
 import java.util.Arrays;

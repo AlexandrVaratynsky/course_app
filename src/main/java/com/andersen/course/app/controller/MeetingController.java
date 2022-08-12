@@ -38,7 +38,7 @@ public class MeetingController {
                                Model model) {
 
         List<Participant> participants = participantService.findAllActiveByCourse(courseID);
-        Meeting meeting = meetingService.addMeetting(courseService.getCourse(courseID));
+        Meeting meeting = meetingService.addMeeting(courseService.getCourse(courseID));
         random = new Random();
         random.setParticipants(participants);
         meetingService.saveMeeting(meeting);
